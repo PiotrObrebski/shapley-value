@@ -1,0 +1,3 @@
+interface Aplication{
+  applicationKey: string
+}
