@@ -1,0 +1,17 @@
+.calculator-function-definition .error-message{  
+  text-align: center;
+  color:red;
+  font-size: 0.8em;
+}
+
+.calculator-function-definition .ant-form.ant-form-horizontal .ant-row.ant-form-item:nth-child(2) {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.calculator-function-definition .ant-form.ant-form-horizontal .ant-row.ant-form-item:nth-child(2) .ant-col.ant-col-12.ant-form-item-label{
+  line-height: 32px;
+}
+
+.calculator-function-definition .ant-form.ant-form-horizontal .ant-row.ant-form-item {
+  margin-bottom: 4px;
+}
