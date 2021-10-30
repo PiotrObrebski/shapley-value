@@ -11,7 +11,7 @@ interface IAppMenuProps {
 
 const AppMenuNotConnected = (props: IAppMenuProps): JSX.Element => {
   const {setContentKey} = props
-  const [appContentKey, setAppContentKey] = useState<string | undefined>(undefined);
+  const [appContentKey, setAppContentKey] = useState<string | undefined>('function');
 
   useEffect(()=>{    
     setContentKey(appContentKey ?? '')

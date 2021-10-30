@@ -1,27 +1,50 @@
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-interface IAppBodyProps{
-  applicationKey: string
+import {
+  CalculatorCoalitionDefinition,
+} from '../../../calculators/calculator-coalition-definition/calculator-coalition-definition';
+import {
+  CalculatorFunctionDefinition,
+} from '../../../calculators/calculator-function-definition/calculator-function-definition';
+
+interface IAppBodyProps {
+  applicationKey?: string;
 }
 
-const AppBodyNotConnected = (props: any): JSX.Element => {
-  const { applicationKey } = props
+const AppBodyNotConnected = (props: IAppBodyProps): JSX.Element => {
+  const { applicationKey } = props;
+  const [
+    calculatorToRender,
+    setCalculatorToRender,
+  ] = useState<JSX.Element | null>(null);
+  const getCalculator = (key?: string): JSX.Element | null => {
+    switch (key) {
+      case "function":
+        return <CalculatorFunctionDefinition />;
+      case "coalition":
+        return <CalculatorCoalitionDefinition />;
+      default:
+        return null;
+    }
+  };
 
-  return (
-    <div>{applicationKey}</div>
-  )
-}
+  useEffect(() => {
+    setCalculatorToRender(getCalculator(applicationKey));
+  }, [applicationKey]);
+  return <div>{calculatorToRender}</div>;
+};
 
-const mapStateToProps = (
-  state: {
-    aplication: {applicationKey: string}
-  }
-) => {
+const mapStateToProps = (state: {
+  aplication: {
+    applicationKey: string;
+  };
+}) => {
   const { aplication } = state;
-  
-  return { applicationKey: aplication.applicationKey };
-}
 
-const AppBody = connect(mapStateToProps, null)(AppBodyNotConnected)
+  return { applicationKey: aplication.applicationKey };
+};
+
+const AppBody = connect(mapStateToProps, null)(AppBodyNotConnected);
 
 export default AppBody;

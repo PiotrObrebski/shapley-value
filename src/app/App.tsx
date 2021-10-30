@@ -1,7 +1,5 @@
 import './App.css';
 import 'antd/dist/antd.css';
-
-import React from 'react';
 import { Provider } from 'react-redux';
 
 import AppBody from '../components/layout/body/app-body/app-body';
