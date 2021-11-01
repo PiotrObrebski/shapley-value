@@ -16,6 +16,7 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
     if (event < 10) {
       setGrandoCalition(generateCoalitionOfN(event))
       setFunctionOfCoalitions(Array(2 ** event).fill(0))
+      setShapleyValues([])
       setMessage(undefined)
     } else setMessage('Number of coalition members exceded!')
   }
