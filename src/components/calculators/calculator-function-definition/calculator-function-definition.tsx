@@ -15,7 +15,7 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
   const handleNumberOfPlayesChange = (event: number) => {
     if (event < 10) {
       setGrandoCalition(generateCoalitionOfN(event))
-      setFunctionOfCoalitions(Array(2**event).fill(0))
+      setFunctionOfCoalitions(Array(2 ** event).fill(0))
       setMessage(undefined)
     } else setMessage('Number of coalition members exceded!')
   }
@@ -118,9 +118,9 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
               value={functionOfCoalitions[index]}
               defaultValue={0}
               onChange={(event: number) => {
-                  const tmpFunction = [...functionOfCoalitions]
-                  tmpFunction[index] = event
-                  setFunctionOfCoalitions(tmpFunction)
+                const tmpFunction = [...functionOfCoalitions]
+                tmpFunction[index] = event
+                setFunctionOfCoalitions(tmpFunction)
               }}
             />
           </Form.Item>
@@ -129,12 +129,17 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
       <Button
         onClick={() => setShapleyValues(
           calculateAllShapleyValues(grandCoalition, coalitionsArray, functionOfCoalitions)
-          )
+        )
         }
       >Generate
       </Button>
+
       <div >
-        {shapleyValues}</div>
+        {shapleyValues.map((value: number, index: number) =>
+          <div className="shapley-value">
+            {`shapley value of player ${index + 1} is ${value}`}
+          </div>)}
+      </div>
     </div>
   );
 };

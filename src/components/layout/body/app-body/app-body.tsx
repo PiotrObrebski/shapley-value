@@ -15,7 +15,7 @@ export const AppBody = (): JSX.Element => {
       <TabPane tab="Simple characteristic function" key="function">
         <CalculatorFunctionDefinition />
       </TabPane >
-      <TabPane tab="Coalition structures values" key="coalition">
+      <TabPane tab="Coalition structures values" key="coalition" disabled>
         <CalculatorCoalitionDefinition />
       </TabPane >
     </Tabs>
