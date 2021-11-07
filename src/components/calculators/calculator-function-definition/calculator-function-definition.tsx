@@ -4,23 +4,22 @@ import './calculator-function-definition.css';
 import _ from 'underscore';
 
 export const CalculatorFunctionDefinition = (): JSX.Element => {
-  const [grandCoalition, setGrandoCalition] = useState<number[]>([]);
+  const [grandCoalition, setGrandCalition] = useState<number[]>([]);
   const [coalitionsArray, setCoalitionsArray] = useState<number[][]>([]);
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [shapleyValues, setShapleyValues] = useState<number[]>([])
   const [functionOfCoalitions, setFunctionOfCoalitions] = useState<number[]>([])
   const generateCoalitionOfN = (event: number) => Array.from({ length: event }, (v, k) => k + 1)
-  const generateCoalitionString = (coalition: number[]): string => coalition.toString()
 
   const handleNumberOfPlayesChange = (event: number) => {
     if (event < 10) {
-      setGrandoCalition(generateCoalitionOfN(event))
+      setGrandCalition(generateCoalitionOfN(event))
       setFunctionOfCoalitions(Array(2 ** event).fill(0))
       setShapleyValues([])
       setMessage(undefined)
     } else setMessage('Number of coalition members exceded!')
   }
-  const indexOfArrayinArray = (arrayOfArrays: number[][], arrayToFind: number[]): number => {
+  const indexOfArrayInArray = (arrayOfArrays: number[][], arrayToFind: number[]): number => {
     let indexOfArray = -1
     arrayOfArrays.forEach((array, index) => {
       if (_.isEqual(array, arrayToFind)) {
@@ -55,10 +54,10 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
     let shapleyValue = 0
     coalitions.forEach((coalition: number[]) => {
       if (coalition.includes(player)) {
-        const valueOfCoalitionWithPlayer = funcOfCoalitions[indexOfArrayinArray(coalitions, coalition)]
+        const valueOfCoalitionWithPlayer = funcOfCoalitions[indexOfArrayInArray(coalitions, coalition)]
         const coalitionWithoutPlayer = [...coalition]
         coalitionWithoutPlayer.splice(coalition.indexOf(player), 1)
-        const valueOfCoalitionWithoutPlayer = funcOfCoalitions[indexOfArrayinArray(coalitions, coalitionWithoutPlayer)]
+        const valueOfCoalitionWithoutPlayer = funcOfCoalitions[indexOfArrayInArray(coalitions, coalitionWithoutPlayer)]
         const numberOfPermutationsC = factorial(coalitionWithoutPlayer.length)
         const numberOfPermutationsA = factorial(players.length - coalitionWithoutPlayer.length - 1)
         const contrCount = numberOfPermutationsA * numberOfPermutationsC / factorial(players.length)
@@ -111,11 +110,9 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
         className="function-inputs"
       >
         {coalitionsArray?.map((coalition, index) => {
-          const labelString = `Value of coalition {${generateCoalitionString(coalition)}}`
+          const labelString = `Value of coalition {${coalition.toString()}}`
           return <Form.Item key={index} label={labelString}>
             <InputNumber
-              min={0}
-              max={28}
               value={functionOfCoalitions[index]}
               defaultValue={0}
               onChange={(event: number) => {
