@@ -1,5 +1,5 @@
 {
-  "homepage": "https://piotrobrebski.github.io/shapley-value/",
+  "homepage": "https://piotrobrebski.github.io/shapley-value",
   "name": "shapley-value",
   "version": "0.1.0",
   "private": true,
@@ -25,7 +25,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@types/underscore": "^1.11.3"
+    "@types/underscore": "^1.11.3",
+    "gh-pages": "^3.2.3"
   }
 }
