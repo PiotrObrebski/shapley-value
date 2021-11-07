@@ -51,7 +51,7 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
     while (n > 0) r *= n--;
     return r;
   }
-  const generateShapleyValue = (player: number, players: number[], coalitions: number[][], funcOfCoalitions: number[]) => {
+  const coalitionsGenerateShapleyValue = (player: number, players: number[], coalitions: number[][], funcOfCoalitions: number[]) => {
     let shapleyValue = 0
     coalitions.forEach((coalition: number[]) => {
       if (coalition.includes(player)) {
@@ -63,7 +63,6 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
         const numberOfPermutationsA = factorial(players.length - coalitionWithoutPlayer.length - 1)
         const contrCount = numberOfPermutationsA * numberOfPermutationsC / factorial(players.length)
         shapleyValue += (valueOfCoalitionWithPlayer - valueOfCoalitionWithoutPlayer) * contrCount
-        console.log(shapleyValue, functionOfCoalitions, valueOfCoalitionWithPlayer, valueOfCoalitionWithoutPlayer, contrCount);
       }
     })
 
@@ -73,8 +72,7 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
   const calculateAllShapleyValues = (players: number[], coalitions: number[][], funcOfCoalitions: number[]) => {
     const shapleyValues: number[] = []
     players.forEach((player: number) => {
-      const playerShapleyValue = generateShapleyValue(player, players, coalitions, funcOfCoalitions)
-
+      const playerShapleyValue = coalitionsGenerateShapleyValue(player, players, coalitions, funcOfCoalitions)
       shapleyValues.push(playerShapleyValue)
     })
     return shapleyValues
@@ -83,12 +81,6 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
   useEffect(() => {
     if (grandCoalition) {
       setCoalitionsArray(generateCoalitions(grandCoalition))
-      // const tmpFunctionOfCoaltions = [...functionOfCoalitions]
-      // functionOfCoalitions.forEach(element => {
-      //   if (element === undefined) {
-
-      //   }
-      // })
     }
   }, [grandCoalition])
 
@@ -98,18 +90,26 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
         labelCol={{ span: 12 }}
         wrapperCol={{ span: 12 }}
         layout="horizontal"
-        size="small"
+        size="middle"
+        className="number-of-players-input"
       >
-        <div className="error-message" >{message}</div>
+        <div className="error-message">{message}</div>
         <Form.Item label="Number of players">
           <InputNumber
-            size="middle"
             min={0}
             max={10}
             defaultValue={0}
             onChange={handleNumberOfPlayesChange}
           />
         </Form.Item>
+      </Form>
+      <Form
+        labelCol={{ span: 12 }}
+        wrapperCol={{ span: 12 }}
+        layout="horizontal"
+        size="small"
+        className="function-inputs"
+      >
         {coalitionsArray?.map((coalition, index) => {
           const labelString = `Value of coalition {${generateCoalitionString(coalition)}}`
           return <Form.Item key={index} label={labelString}>
@@ -130,12 +130,10 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
       <Button
         onClick={() => setShapleyValues(
           calculateAllShapleyValues(grandCoalition, coalitionsArray, functionOfCoalitions)
-        )
-        }
-      >Generate
+        )}>
+        Generate
       </Button>
-
-      <div >
+      <div>
         {shapleyValues.map((value: number, index: number) =>
           <div className="shapley-value">
             {`shapley value of player ${index + 1} is ${value}`}

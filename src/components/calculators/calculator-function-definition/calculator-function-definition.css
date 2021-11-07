@@ -4,7 +4,7 @@
   font-size: 0.8em;
 }
 
-.calculator-function-definition .ant-form.ant-form-horizontal .ant-row.ant-form-item:nth-child(2) {
+.calculator-function-definition .number-of-players-input .ant-row.ant-form-item:nth-child(2) {
   padding-bottom: 8px;
   border-bottom: 1px solid #f0f0f0;
 }
