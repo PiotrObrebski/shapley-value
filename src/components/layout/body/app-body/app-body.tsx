@@ -1,10 +1,10 @@
 import { Tabs } from 'antd';
 import {
-  CalculatorCoalitionDefinition,
-} from '../../../calculators/calculator-coalition-definition/calculator-coalition-definition';
-import {
   CalculatorFunctionDefinition,
 } from '../../../calculators/calculator-function-definition/calculator-function-definition';
+import {
+  CalculatorCoalitionStructures,
+} from '../../../calculators/calculator-coalition-structures/calculator-coalition-structures';
 
 const { TabPane } = Tabs
 
@@ -12,11 +12,11 @@ export const AppBody = (): JSX.Element => {
 
   return (
     <Tabs centered>
-      <TabPane tab="Simple characteristic function" key="function">
-        <CalculatorFunctionDefinition />
+      <TabPane tab="Coalition structures values" key="coalition">
+        <CalculatorCoalitionStructures />
       </TabPane >
-      <TabPane tab="Coalition structures values" key="coalition" disabled>
-        <CalculatorCoalitionDefinition />
+      <TabPane tab="Function generationg values" key="function">
+        <CalculatorFunctionDefinition />
       </TabPane >
     </Tabs>
   )
