@@ -4,9 +4,9 @@ import RSC from "react-scrollbars-custom";
 import './calculator-coalition-structures.scss';
 import _ from 'underscore';
 import { calculateAllShapleyValues, generateCoalitions } from '../../../utilities/calculationg-functions';
-import NumberOfPlayersForm from './elements/number-of-players-input';
-import CoalitionStructuresInput from './elements/coalition-structures-input';
-import DisplayGeneratedValues from './elements/display-generated-values';
+import CoalitionStructuresInput from './coalition-structures-input';
+import NumberOfPlayersForm from '../../shared/number-of-players-input';
+import DisplayGeneratedValues from '../../shared/display-generated-values';
 
 export const CalculatorCoalitionStructures = (): JSX.Element => {
   const [grandCoalition, setGrandCalition] = useState<number[]>([]);

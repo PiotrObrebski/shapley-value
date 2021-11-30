@@ -1,23 +1,37 @@
-import { Button, Form, InputNumber } from 'antd';
+import { useState } from 'react';
+import NumberOfPlayersForm from '../../shared/number-of-players-input';
+import { FunctionDefinitionInput } from './function-definition-input';
 export const CalculatorFunctionDefinition = (): JSX.Element => {
+  const [grandCoalition, setGrandCalition] = useState<number[]>([]);
+  const [coalitionsArray, setCoalitionsArray] = useState<number[][]>([]);
+  const [message, setMessage] = useState<string | undefined>(undefined);
+  const [shapleyValues, setShapleyValues] = useState<number[]>([])
+  const [functionOfCoalitions, setFunctionOfCoalitions] = useState<number[]>([])
+  const generateCoalitionOfN = (event: number) => Array.from({ length: event }, (v, k) => k + 1)
+  const [listShapleyValues, setListShapleyValues] = useState<string[]>([])
+
+  const handleNumberOfPlayesChange = (event: number) => {
+    if (event < 10) {
+      setGrandCalition(generateCoalitionOfN(event))
+      setFunctionOfCoalitions(Array(2 ** event).fill(0))
+      setShapleyValues([])
+      setMessage(undefined)
+    } else setMessage('Number of coalition members exceded!')
+  }
+
   return (
     <div className="calculator-coalition-definition">
-      <Form
-      labelCol={{ span: 12 }}
-      wrapperCol={{ span: 12 }}
-        layout="horizontal"
-      >
-        <Form.Item label="Number of players">
-          <InputNumber
-            min={3}
-            max={7}
-            defaultValue={3}
-          />
-        </Form.Item>
-        <Form.Item label="">
-          <Button>Generate Coalitions</Button>
-        </Form.Item>
-      </Form>
+      <NumberOfPlayersForm
+        message={message}
+        handleNumberOfPlayesChange={handleNumberOfPlayesChange}
+      />
+      
+      <FunctionDefinitionInput
+        // grandCoalition={grandCoalition}
+        // coalitionsArray={coalitionsArray}
+        // functionOfCoalitions={functionOfCoalitions}
+        // setFunctionOfCoalitions={setFunctionOfCoalitions}
+      />
     </div>
   );
 };
