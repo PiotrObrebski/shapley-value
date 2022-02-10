@@ -1,43 +1,42 @@
 
-import { List } from "antd";
-import RSC from "react-scrollbars-custom";
+import { Table } from "antd";
+import Column from "antd/lib/table/Column";
 
 export interface IDisplayGeneratedValuesProps {
-  listShapleyValues: string[]
+  listShapleyValues: number[]
 }
 
 export const DisplayGeneratedValues = (props: IDisplayGeneratedValuesProps): JSX.Element => {
   const { listShapleyValues } = props
+  const dataSource = listShapleyValues.map((shapleuValue, index) => ({
+    key: index,
+    value: shapleuValue,
+    playerNumber: index + 1
+  }))
+
+  const columns = [{
+    title: 'Player number',
+    dataIndex: 'value',
+    key: 'value',
+    align: 'center' as 'left' | 'right' | 'center',
+  }, {
+    title: 'Player Shapley Value',
+    dataIndex: 'value',
+    key: 'value',
+    align: 'center' as 'left' | 'right' | 'center',
+  }]
 
   return (
-    <>
-      {listShapleyValues.length
-        ?
-        <RSC style={{
-          margin: "10px",
-          border: "1px solid #ddd",
-          borderRadius: "10px",
-          boxShadow: "0 0 20px 4px #0000000a",
-          width: "calc(100% - 32px)",
-          minHeight: "250px",
-          maxHeight: "40vh"
-        }}>
-          <List
-            size="small"
-            dataSource={listShapleyValues}
-            renderItem={item =>
-              <List.Item
-                style={{
-                  justifyContent: 'space-around',
-                  borderBottom: '1px solid #ddd'
-                }}
-              >
-                {item}
-              </List.Item>}
-          />
-        </RSC>
-        : null}
-    </>
+    <Table
+      bordered={true}
+      size="small"
+      dataSource={dataSource}
+      pagination={false}
+      scroll={{ y: 300 }}
+      className="display-generated-values"
+    >
+      {columns.map((column) => <Column {...column} />)}
+    </Table>
   )
 }
 

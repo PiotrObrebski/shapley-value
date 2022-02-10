@@ -1,8 +1,6 @@
-import { Form, InputNumber, Button, Row, List } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
-import RSC from "react-scrollbars-custom";
+import { Button, Col, Row } from 'antd';
+import { useEffect, useState } from 'react';
 import './calculator-coalition-structures.scss';
-import _ from 'underscore';
 import { calculateAllShapleyValues, generateCoalitions } from '../../../utilities/calculationg-functions';
 import CoalitionStructuresInput from './coalition-structures-input';
 import NumberOfPlayersForm from '../../shared/number-of-players-input';
@@ -15,7 +13,7 @@ export const CalculatorCoalitionStructures = (): JSX.Element => {
   const [shapleyValues, setShapleyValues] = useState<number[]>([])
   const [functionOfCoalitions, setFunctionOfCoalitions] = useState<number[]>([])
   const generateCoalitionOfN = (event: number) => Array.from({ length: event }, (v, k) => k + 1)
-  const [listShapleyValues, setListShapleyValues] = useState<string[]>([])
+
   const handleNumberOfPlayesChange = (event: number) => {
     if (event < 10) {
       setGrandCalition(generateCoalitionOfN(event))
@@ -25,19 +23,12 @@ export const CalculatorCoalitionStructures = (): JSX.Element => {
     } else setMessage('Number of coalition members exceded!')
   }
 
-
   useEffect(() => {
     if (grandCoalition) {
       setCoalitionsArray(generateCoalitions(grandCoalition))
     }
   }, [grandCoalition])
 
-  useEffect(() => {
-    setListShapleyValues(
-      shapleyValues.map((value: number, index: number) =>
-        `shapley value of player ${index + 1} is ${value}`
-      ))
-  }, [shapleyValues])
 
   return (
     <div className="calculator-coalition-structures">
@@ -45,26 +36,30 @@ export const CalculatorCoalitionStructures = (): JSX.Element => {
         message={message}
         handleNumberOfPlayesChange={handleNumberOfPlayesChange}
       />
-      <CoalitionStructuresInput
-        grandCoalition={grandCoalition}
-        coalitionsArray={coalitionsArray}
-        functionOfCoalitions={functionOfCoalitions}
-        setFunctionOfCoalitions={setFunctionOfCoalitions}
-      />
       <Row justify="center">
-        <Button
-          type="primary"
-          disabled={!grandCoalition.length}
-          className="generate-button"
-          onClick={() => setShapleyValues(
-            calculateAllShapleyValues(grandCoalition, coalitionsArray, functionOfCoalitions)
-          )}>
-          Generate
-        </Button>
+        <Col xs={24} sm={24} md={24} lg={10} xl={10}>
+          <CoalitionStructuresInput
+            coalitionsArray={coalitionsArray}
+            functionOfCoalitions={functionOfCoalitions}
+            setFunctionOfCoalitions={setFunctionOfCoalitions}
+          />
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={4} xl={4}>
+          <Button
+            type="primary"
+            disabled={!grandCoalition.length}
+            className="generate-button"
+            onClick={() => setShapleyValues(
+              calculateAllShapleyValues(grandCoalition, coalitionsArray, functionOfCoalitions)
+            )}>
+            Generate
+          </Button>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={10} xl={10}>
+          <DisplayGeneratedValues listShapleyValues={shapleyValues} />
+        </Col>
       </Row>
-      <DisplayGeneratedValues listShapleyValues={listShapleyValues}/>
     </div>
-
   );
 };
 

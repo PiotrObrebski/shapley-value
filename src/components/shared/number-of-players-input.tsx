@@ -6,8 +6,8 @@ export interface INumberOfPlayersForm {
 export const NumberOfPlayersForm = (props: INumberOfPlayersForm): JSX.Element => {
   const { message, handleNumberOfPlayesChange } = props
   return <Form
-    labelCol={{ span: 14 }}
-    wrapperCol={{ span: 10 }}
+    labelCol={{ span: 12 }}
+    wrapperCol={{ span: 12 }}
     layout="horizontal"
     size="middle"
     className="number-of-players-input"

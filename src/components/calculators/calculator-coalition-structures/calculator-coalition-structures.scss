@@ -1,4 +1,9 @@
 .calculator-coalition-structures {
+  .coalition-structures-input,
+  .display-generated-values {
+    max-width: 400px;
+    margin: 0 auto;
+  }
   .error-message {
     text-align: center;
     color: red;
@@ -13,15 +18,14 @@
   }
   .function-inputs {
     padding: 10px;
-    &.scrolling {
-      padding-right: 0;
-    }
   }
   .ScrollbarsCustom-Track.ScrollbarsCustom-TrackY {
     width: 7px !important;
   }
   .ant-btn.generate-button {
-    margin-top: 16px;
+    width: 90px;
+    margin: 24px calc(50% - 45px);
+    box-sizing: border-box;
   }
   @media (max-width: 575px) {
     .ant-form .ant-form-item .ant-form-item-label,
