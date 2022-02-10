@@ -1,7 +1,7 @@
 import { Button, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import './calculator-coalition-structures.scss';
-import { calculateAllShapleyValues, generateCoalitions } from '../../../utilities/calculationg-functions';
+import { calculateAllShapleyValues, generateCoalitions, generateCoalitionOfN } from '../../../utilities/calculationg-functions';
 import CoalitionStructuresInput from './coalition-structures-input';
 import NumberOfPlayersForm from '../../shared/number-of-players-input';
 import DisplayGeneratedValues from '../../shared/display-generated-values';
@@ -12,7 +12,6 @@ export const CalculatorCoalitionStructures = (): JSX.Element => {
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [shapleyValues, setShapleyValues] = useState<number[]>([])
   const [functionOfCoalitions, setFunctionOfCoalitions] = useState<number[]>([])
-  const generateCoalitionOfN = (event: number) => Array.from({ length: event }, (v, k) => k + 1)
 
   const handleNumberOfPlayesChange = (event: number) => {
     if (event < 10) {

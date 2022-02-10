@@ -8,15 +8,19 @@ export interface IMCNetsRule {
   value: number
 }
 export const CalculatorMCNets = (): JSX.Element => {
-  const handleNumberOfPlayesChange = (event: number) => { }
+  const [nrPlayers, setNrPlayers] = useState<number>(0)
   const [rules, setRules] = useState<IMCNetsRule[]>([])
+  const handleNumberOfPlayesChange = (event: number) => setNrPlayers(event)
+
   return (
     <div className="calculator-mc-nets">
+      {nrPlayers}
       <NumberOfPlayersForm
+        maxValue={20}
         handleNumberOfPlayesChange={handleNumberOfPlayesChange}
       />
       {rules.map((rule, index) => {
-        return <MCNetsRule key={index} rule={rule} setRules={setRules} />
+        return <MCNetsRule key={index} index={index} rules={rules} setRules={setRules} nrPlayers={nrPlayers} />
       })}
       <AddMCNetsRule rules={rules} setRules={setRules} />
     </div>

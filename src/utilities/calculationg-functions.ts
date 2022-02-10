@@ -59,3 +59,4 @@ export const calculateAllShapleyValues = (players: number[], coalitions: number[
   })
   return shapleyValues
 }
+export const generateCoalitionOfN = (event: number) => Array.from({ length: event }, (v, k) => k + 1)
