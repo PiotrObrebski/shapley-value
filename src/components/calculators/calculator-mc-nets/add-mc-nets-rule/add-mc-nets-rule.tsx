@@ -7,9 +7,10 @@ export interface IAddMCNetsRuleProps {
 }
 export const AddMCNetsRule = (props: IAddMCNetsRuleProps): JSX.Element => {
   const { rules, setRules } = props
+
   return (
     <div className="add-mc-nets-rule">
-      <Row justify="end">
+      <Row justify="center">
         <Col flex="40px">
           <Button
             type="primary"
@@ -19,7 +20,7 @@ export const AddMCNetsRule = (props: IAddMCNetsRuleProps): JSX.Element => {
               setRules([...rules, {
                 posisitePlayers: [],
                 negativePlayers: [],
-                value: 0
+                value: rules.length
               }])}
           />
         </Col>

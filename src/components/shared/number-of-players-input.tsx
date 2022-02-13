@@ -1,7 +1,7 @@
 import { Form, InputNumber } from "antd"
 export interface INumberOfPlayersForm {
   message?: string
-  maxValue?: number
+  maxValue: number
   handleNumberOfPlayesChange?: (event: number) => void
 }
 export const NumberOfPlayersForm = (props: INumberOfPlayersForm): JSX.Element => {
@@ -17,7 +17,7 @@ export const NumberOfPlayersForm = (props: INumberOfPlayersForm): JSX.Element =>
     <Form.Item labelAlign="right" label="Number of players">
       <InputNumber
         min={0}
-        max={maxValue ?? 10}
+        max={maxValue - 1}
         defaultValue={0}
         onChange={handleNumberOfPlayesChange}
       />

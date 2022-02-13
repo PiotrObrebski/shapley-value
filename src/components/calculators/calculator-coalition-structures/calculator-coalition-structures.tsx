@@ -12,9 +12,9 @@ export const CalculatorCoalitionStructures = (): JSX.Element => {
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [shapleyValues, setShapleyValues] = useState<number[]>([])
   const [functionOfCoalitions, setFunctionOfCoalitions] = useState<number[]>([])
-
+  const maxValue = 10
   const handleNumberOfPlayesChange = (event: number) => {
-    if (event < 10) {
+    if (event < maxValue) {
       setGrandCalition(generateCoalitionOfN(event))
       setFunctionOfCoalitions(Array(2 ** event).fill(0))
       setShapleyValues([])
@@ -32,6 +32,7 @@ export const CalculatorCoalitionStructures = (): JSX.Element => {
   return (
     <div className="calculator-coalition-structures">
       <NumberOfPlayersForm
+        maxValue={maxValue}
         message={message}
         handleNumberOfPlayesChange={handleNumberOfPlayesChange}
       />

@@ -22,15 +22,16 @@ export const CalculatorFunctionDefinition = (): JSX.Element => {
   return (
     <div className="calculator-coalition-definition">
       <NumberOfPlayersForm
+        maxValue={10}
         message={message}
         handleNumberOfPlayesChange={handleNumberOfPlayesChange}
       />
-      
+
       <FunctionDefinitionInput
-        // grandCoalition={grandCoalition}
-        // coalitionsArray={coalitionsArray}
-        // functionOfCoalitions={functionOfCoalitions}
-        // setFunctionOfCoalitions={setFunctionOfCoalitions}
+      // grandCoalition={grandCoalition}
+      // coalitionsArray={coalitionsArray}
+      // functionOfCoalitions={functionOfCoalitions}
+      // setFunctionOfCoalitions={setFunctionOfCoalitions}
       />
     </div>
   );

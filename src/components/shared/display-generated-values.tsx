@@ -8,16 +8,20 @@ export interface IDisplayGeneratedValuesProps {
 
 export const DisplayGeneratedValues = (props: IDisplayGeneratedValuesProps): JSX.Element => {
   const { listShapleyValues } = props
-  const dataSource = listShapleyValues.map((shapleuValue, index) => ({
-    key: index,
-    value: shapleuValue,
-    playerNumber: index + 1
-  }))
+  const dataSource = listShapleyValues.map((shapleuValue, index) => {
+    console.log(index);
+
+    return {
+      key: index,
+      value: shapleuValue,
+      playerNumber: index + 1
+    }
+  })
 
   const columns = [{
     title: 'Player number',
-    dataIndex: 'value',
-    key: 'value',
+    dataIndex: 'playerNumber',
+    key: 'playerNumber',
     align: 'center' as 'left' | 'right' | 'center',
   }, {
     title: 'Player Shapley Value',
