@@ -16,7 +16,7 @@ export const AppBody = (): JSX.Element => {
       <TabPane tab="Coalition structures definition" key="coalition">
         <CalculatorCoalitionStructures />
       </TabPane >
-      <TabPane tab="Function generating values" key="function">
+      <TabPane tab="Function generating values" key="function" disabled>
         <CalculatorFunctionDefinition />
       </TabPane >
       <TabPane tab="MC-nets game representation" key="mc-nets">
