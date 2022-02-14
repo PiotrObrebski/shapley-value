@@ -9,8 +9,6 @@ export interface IDisplayGeneratedValuesProps {
 export const DisplayGeneratedValues = (props: IDisplayGeneratedValuesProps): JSX.Element => {
   const { listShapleyValues } = props
   const dataSource = listShapleyValues.map((shapleuValue, index) => {
-    console.log(index);
-
     return {
       key: index,
       value: shapleuValue,

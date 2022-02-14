@@ -1,5 +1,5 @@
 import { MinusOutlined } from "@ant-design/icons";
-import { Button, Col, Input, InputNumber, Row } from "antd"
+import { Button, Col, InputNumber, Row } from "antd"
 import { generateCoalitionOfN } from "../../../../utilities/calculationg-functions";
 import { IMCNetsRule } from "../calculator-mc-nets";
 import { PlayersGroup } from "./players-group";
@@ -15,14 +15,14 @@ export const MCNetsRule = (props: IMCNetsRuleProps): JSX.Element => {
   const { index, nrPlayers, rules, setRules } = props
   const onPositiveChange = (checkedValues: string[]) => {
     const tmpRules = [...rules]
-    tmpRules[index].posisitePlayers = checkedValues
+    tmpRules[index].positivePlayers = checkedValues
     tmpRules[index].negativePlayers = tmpRules[index].negativePlayers.filter(val => !checkedValues.includes(val));
     setRules(tmpRules)
   }
   const onNegativeChange = (checkedValues: any) => {
     const tmpRules = [...rules]
     tmpRules[index].negativePlayers = checkedValues
-    tmpRules[index].posisitePlayers = tmpRules[index].posisitePlayers.filter(val => !checkedValues.includes(val));
+    tmpRules[index].positivePlayers = tmpRules[index].positivePlayers.filter(val => !checkedValues.includes(val));
     setRules(tmpRules)
   }
 
@@ -31,15 +31,19 @@ export const MCNetsRule = (props: IMCNetsRuleProps): JSX.Element => {
     <div className="mc-nets-rule">
       <Row align="middle" wrap={false} justify="center">
         <Col flex="100px" className="mc-nets-rule-name">{`Rule nr ${index}`}
-          <InputNumber placeholder="Value" onChange={(event) => {
-            const tmpRules = [...rules]
-            tmpRules[index].value = event as number
-            setRules(tmpRules)
-          }} />
+          <InputNumber
+            placeholder="Value"
+            onChange={(event) => {
+              const tmpRules = [...rules]
+              tmpRules[index].value = event as number
+              setRules(tmpRules)
+            }}
+            value={rules[index].value}
+          />
         </Col>
         <Col flex='auto' >
           <div className="player-group-name">Positive Players</div>
-          <PlayersGroup onChange={onPositiveChange} value={rules[index].posisitePlayers} options={plainOptions} />
+          <PlayersGroup onChange={onPositiveChange} value={rules[index].positivePlayers} options={plainOptions} />
         </Col>
         <Col flex='auto' >
           <div className="player-group-name">Negative Players</div>

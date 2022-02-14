@@ -1,4 +1,5 @@
 import _ from "underscore"
+import { IMCNetsRule } from "../components/calculators/calculator-mc-nets/calculator-mc-nets"
 
 export const indexOfArrayInArray = (arrayOfArrays: number[][], arrayToFind: number[]): number => {
   let indexOfArray = -1
@@ -59,4 +60,31 @@ export const calculateAllShapleyValues = (players: number[], coalitions: number[
   })
   return shapleyValues
 }
+
 export const generateCoalitionOfN = (event: number) => Array.from({ length: event }, (v, k) => k + 1)
+
+export const calculatePositivePlayersMarginalContribution = (positive: number, negative: number, value: number): number => {
+  return value * factorial(positive - 1) * factorial(negative) / factorial(positive + negative)
+}
+export const calculateNegativePlayersMarginalContribution = (positive: number, negative: number, value: number): number => {
+  return -1 * value * (factorial(negative - 1) * factorial(positive)) / factorial(positive + negative)
+}
+
+export const calculateMCNetsShapleyValues = (rules: IMCNetsRule[], nrOfPlayers: number) => {
+  const values: number[] = Array(nrOfPlayers).fill(0)
+  rules.forEach((rule) => {
+    const numberOfPositivePlayers = rule.positivePlayers.length
+    const numberOfNegativePlayers = rule.negativePlayers.length
+    const positivePlayersContribution = calculatePositivePlayersMarginalContribution(numberOfPositivePlayers, numberOfNegativePlayers, rule.value)
+    const negativePlayersContribution = calculateNegativePlayersMarginalContribution(numberOfNegativePlayers, numberOfPositivePlayers, rule.value)
+
+    rule.positivePlayers.forEach(player => {
+      values[parseFloat(player) - 1] += positivePlayersContribution
+    })
+
+    rule.negativePlayers.forEach(player => {
+      values[parseFloat(player) - 1] += negativePlayersContribution
+    })
+  })
+  return values
+}

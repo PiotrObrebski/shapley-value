@@ -10,7 +10,8 @@ export const AddMCNetsRule = (props: IAddMCNetsRuleProps): JSX.Element => {
 
   return (
     <div className="add-mc-nets-rule">
-      <Row justify="center">
+      <Row justify="center" align="middle">
+        <Col flex="64px">          Add Rule</Col>
         <Col flex="40px">
           <Button
             type="primary"
@@ -18,9 +19,9 @@ export const AddMCNetsRule = (props: IAddMCNetsRuleProps): JSX.Element => {
             icon={<PlusOutlined />}
             onClick={() =>
               setRules([...rules, {
-                posisitePlayers: [],
+                positivePlayers: [],
                 negativePlayers: [],
-                value: rules.length
+                value: 0
               }])}
           />
         </Col>
