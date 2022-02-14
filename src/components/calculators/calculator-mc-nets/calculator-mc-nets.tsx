@@ -16,10 +16,10 @@ export const CalculatorMCNets = (): JSX.Element => {
   const [rules, setRules] = useState<IMCNetsRule[]>([])
   const [shapleyValues, setShapleyValues] = useState<number[]>([])
   const handleNumberOfPlayesChange = (event: number) => setNrPlayers(event)
-
+  const [activeKeys, setActiveKeys] = useState<string[]>(['1', '2'])
   return (
     <div className="calculator-mc-nets">
-      <Collapse defaultActiveKey={['1']}>
+      <Collapse activeKey={activeKeys} onChange={(keys) => setActiveKeys(keys as string[])}>
         <Collapse.Panel header="Game Definition" key="1">
           <Row justify="center">
             <Col span={12}>
@@ -39,18 +39,25 @@ export const CalculatorMCNets = (): JSX.Element => {
             })}
           </div>
         </Collapse.Panel>
+
+        <Collapse.Panel showArrow={false} forceRender={true} header="" key="2" collapsible='disabled' className="generate-panel">
+          <Row justify="center" gutter={32}>
+            <Button
+              type="primary"
+              disabled={!nrPlayers}
+              className="generate-button"
+              onClick={() => {
+                setShapleyValues(calculateMCNetsShapleyValues(rules, nrPlayers))
+                const tmpActiveKeys = activeKeys.includes('3') ? activeKeys : [...activeKeys, '3']
+                setActiveKeys(tmpActiveKeys)
+              }}>
+              Calculate
+            </Button></Row>
+        </Collapse.Panel>
+        <Collapse.Panel header="Shapley Values" key="3" className="values-panel">
+          <DisplayGeneratedValues listShapleyValues={shapleyValues} tableMaxHeight={200} />
+        </Collapse.Panel>
       </Collapse>
-      <Row justify="center" gutter={32}>
-        <Button
-          type="primary"
-          disabled={!nrPlayers}
-          className="generate-button"
-          onClick={() => {
-            setShapleyValues(calculateMCNetsShapleyValues(rules, nrPlayers))
-          }}>
-          Calculate
-        </Button></Row>
-      <DisplayGeneratedValues listShapleyValues={shapleyValues} />
     </div>
   )
 }

@@ -4,10 +4,11 @@ import Column from "antd/lib/table/Column";
 
 export interface IDisplayGeneratedValuesProps {
   listShapleyValues: number[]
+  tableMaxHeight?: number
 }
 
 export const DisplayGeneratedValues = (props: IDisplayGeneratedValuesProps): JSX.Element => {
-  const { listShapleyValues } = props
+  const { listShapleyValues, tableMaxHeight } = props
   const dataSource = listShapleyValues.map((shapleuValue, index) => {
     return {
       key: index,
@@ -34,7 +35,7 @@ export const DisplayGeneratedValues = (props: IDisplayGeneratedValuesProps): JSX
       size="small"
       dataSource={dataSource}
       pagination={false}
-      scroll={{ y: 300 }}
+      scroll={{ y: tableMaxHeight ?? 300 }}
       className="display-generated-values"
     >
       {columns.map((column) => <Column {...column} />)}
