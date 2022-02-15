@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import NumberOfPlayersForm from '../../shared/number-of-players-input';
+import NumberOfPlayersForm from '../../shared-components/number-of-players-input';
 import { FunctionDefinitionInput } from './function-definition-input';
 export const CalculatorFunctionDefinition = (): JSX.Element => {
   const [grandCoalition, setGrandCalition] = useState<number[]>([]);

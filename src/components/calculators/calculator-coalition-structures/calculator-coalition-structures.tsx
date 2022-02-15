@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import './calculator-coalition-structures.scss';
 import { calculateAllShapleyValues, generateCoalitions, generateCoalitionOfN } from '../../../utilities/calculationg-functions';
 import CoalitionStructuresInput from './coalition-structures-input';
-import NumberOfPlayersForm from '../../shared/number-of-players-input';
-import DisplayGeneratedValues from '../../shared/display-generated-values';
+import NumberOfPlayersForm from '../../shared-components/number-of-players-input';
+import DisplayGeneratedValues from '../../shared-components/display-generated-values';
 
 export const CalculatorCoalitionStructures = (): JSX.Element => {
   const [grandCoalition, setGrandCalition] = useState<number[]>([]);

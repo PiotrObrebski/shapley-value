@@ -1,16 +1,18 @@
 import { Button, Col, Collapse, Row } from "antd"
 import { useState } from "react"
 import { calculateMCNetsShapleyValues } from "../../../utilities/calculationg-functions"
-import DisplayGeneratedValues from "../../shared/display-generated-values"
-import NumberOfPlayersForm from "../../shared/number-of-players-input"
+import DisplayGeneratedValues from "../../shared-components/display-generated-values"
+import NumberOfPlayersForm from "../../shared-components/number-of-players-input"
 import { AddMCNetsRule } from "./add-mc-nets-rule/add-mc-nets-rule"
 import { MCNetsRule } from "./mc-nets-rule/mc-nets-rule"
 import './calculator-mc-nets.scss'
+
 export interface IMCNetsRule {
   positivePlayers: string[]
   negativePlayers: string[]
   value: number
 }
+
 export const CalculatorMCNets = (): JSX.Element => {
   const [nrPlayers, setNrPlayers] = useState<number>(0)
   const [rules, setRules] = useState<IMCNetsRule[]>([])
@@ -39,8 +41,7 @@ export const CalculatorMCNets = (): JSX.Element => {
             })}
           </div>
         </Collapse.Panel>
-
-        <Collapse.Panel showArrow={false} forceRender={true} header="" key="2" collapsible='disabled' className="generate-panel">
+        <Collapse.Panel header="" key="2" showArrow={false} forceRender={true} collapsible='disabled' className="generate-panel">
           <Row justify="center" gutter={32}>
             <Button
               type="primary"

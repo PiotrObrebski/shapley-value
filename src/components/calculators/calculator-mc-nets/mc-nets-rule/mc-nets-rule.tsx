@@ -2,9 +2,8 @@ import { MinusOutlined } from "@ant-design/icons";
 import { Button, Col, InputNumber, Row } from "antd"
 import { generateCoalitionOfN } from "../../../../utilities/calculationg-functions";
 import { IMCNetsRule } from "../calculator-mc-nets";
-import { PlayersGroup } from "./players-group";
 import './mc-nets-rule.scss'
-import './player-group.scss'
+import { PlayersGroup } from "./player-group/players-group";
 export interface IMCNetsRuleProps {
   index: number
   nrPlayers: number
