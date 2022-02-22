@@ -5,14 +5,15 @@ import {
   calculateAllShapleyValues,
   generateCoalitions,
   generateCoalitionOfN,
-} from "../../../utilities/calculationg-functions";
+} from "../../../utilities/calculation-functions";
 import CoalitionStructuresInput from "./coalition-structures-input";
 import NumberOfPlayersForm from "../../shared-components/number-of-players-input";
 import DisplayGeneratedValues from "../../shared-components/display-generated-values";
 import CSVReader from "react-csv-reader";
 import { connect } from "react-redux";
 import {
-  setCoalitionsGameDefinition,
+  setCoalitionsCoalitions,
+  setCoalitionsFunctionOfCoalitions,
   setCoalitionsNumberOfplayers,
   setCoalitionsShapleyValues,
 } from "../../../redux/actions";
@@ -22,9 +23,13 @@ interface ICalculatorCoalitionStructuresProps extends CoalitionsGame {
     type: string;
     payload: number;
   };
-  setCoalitionsGameDefinition: (content: CoalitionsGameDefinition) => {
+  setCoalitionsCoalitions: (coalitions: number[][]) => {
     type: string;
-    payload: CoalitionsGameDefinition;
+    payload: number[][];
+  };
+  setCoalitionsFunctionOfCoalitions: (values: number[]) => {
+    type: string;
+    payload: number[];
   };
   setCoalitionsShapleyValues: (content: number[]) => {
     type: string;
@@ -35,91 +40,103 @@ interface ICalculatorCoalitionStructuresProps extends CoalitionsGame {
 const CalculatorCoalitionStructuresNotConnected = (
   props: ICalculatorCoalitionStructuresProps
 ): JSX.Element => {
-  console.log(props);
   const {
     nrOfPlayes,
-    gameDefinition,
-    shapleyValues: shapleyValuesProps,
+    coalitions,
+    functionOfCoalitions,
+    shapleyValues,
     setCoalitionsNumberOfplayers,
-    setCoalitionsGameDefinition,
+    setCoalitionsCoalitions,
+    setCoalitionsFunctionOfCoalitions,
     setCoalitionsShapleyValues,
   } = props;
   const [grandCoalition, setGrandCalition] = useState<number[]>(
     nrOfPlayes ? generateCoalitionOfN(nrOfPlayes) : []
   );
   const [message, setMessage] = useState<string | undefined>(undefined);
-  const [shapleyValues, setShapleyValues] = useState<number[]>(
-    shapleyValuesProps ?? []
-  );
-  const [functionOfCoalitions, setFunctionOfCoalitions] = useState<number[]>(
-    gameDefinition?.values ?? []
-  );
   const maxValue = 10;
   const handleNumberOfPlayesChange = (event: number) => {
     if (event < maxValue) {
       setCoalitionsNumberOfplayers(event);
       setGrandCalition(generateCoalitionOfN(event));
-
-      setFunctionOfCoalitions(Array(2 ** event).fill(0));
-      setShapleyValues([]);
+      setCoalitionsFunctionOfCoalitions(Array(2 ** event).fill(0));
+      setCoalitionsShapleyValues([]);
       setMessage(undefined);
     } else setMessage("Number of coalition members exceded!");
   };
 
   useEffect(() => {
     if (grandCoalition) {
-      setCoalitionsGameDefinition({
-        coalitions: generateCoalitions(grandCoalition),
-        values: functionOfCoalitions,
-      });
+      const newCoalitions = generateCoalitions(grandCoalition);
+      newCoalitions[0].unshift(0);
+      setCoalitionsCoalitions(newCoalitions);
     }
-  }, [functionOfCoalitions, grandCoalition, setCoalitionsGameDefinition]);
+  }, [grandCoalition, setCoalitionsCoalitions]);
 
-  const handleForce = (data: any, fileInfo: any) => console.log(data, fileInfo);
+  const handleForce = (data: any) => {
+    const newCoalitions: number[][] = [];
+    const newFunctionOfCoalitions: number[] = [];
+    let numberOfPlayers = 0;
 
-  const papaparseOptions = {
-    header: true,
-    dynamicTyping: true,
-    skipEmptyLines: true,
-    transformHeader: (header: string) =>
-      header.toLowerCase().replace(/\W/g, "_"),
+    data.forEach((row: number[]) => {
+      row.pop();
+      const currentCoalition = row.slice(0, -1);
+      numberOfPlayers =
+        currentCoalition.length > numberOfPlayers
+          ? currentCoalition.length
+          : numberOfPlayers;
+      newCoalitions.push(currentCoalition);
+      newFunctionOfCoalitions.push(row.slice(-1).pop() ?? 0);
+    });
+
+    setCoalitionsNumberOfplayers(numberOfPlayers);
+    setCoalitionsCoalitions(newCoalitions);
+    setCoalitionsFunctionOfCoalitions(newFunctionOfCoalitions);
   };
 
+  const handleDownloadGameDefinition = () => {
+    const gameDefinition: number[][] = coalitions?.map((coalition, index) => {
+      return [...coalition, functionOfCoalitions?.[index] ?? 0];
+    }) ?? [[0]];
+    // gameDefinition[0].unshift(0);
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      gameDefinition?.map((e) => e.join(",") + ",").join("\n");
+
+    window.open(encodeURI(csvContent));
+  };
   return (
     <div className="calculator-coalition-structures">
       <NumberOfPlayersForm
+        numberOfPlayers={nrOfPlayes}
         maxValue={maxValue}
         message={message}
         handleNumberOfPlayesChange={handleNumberOfPlayesChange}
       />
       <Row justify="center">
         <Col xs={24} sm={24} md={24} lg={10} xl={10}>
-          <CoalitionStructuresInput
-            coalitionsArray={gameDefinition?.coalitions ?? []}
-            functionOfCoalitions={functionOfCoalitions}
-            setFunctionOfCoalitions={setFunctionOfCoalitions}
-          />
+          <CoalitionStructuresInput />
         </Col>
         <Col xs={24} sm={24} md={24} lg={4} xl={4}>
           <Button
             type="primary"
             disabled={!grandCoalition.length}
             className="generate-button"
-            onClick={() =>
-              setShapleyValues(
+            onClick={() => {
+              setCoalitionsShapleyValues(
                 calculateAllShapleyValues(
                   grandCoalition,
-                  gameDefinition?.coalitions ?? [],
-                  functionOfCoalitions
+                  coalitions ?? [],
+                  functionOfCoalitions ?? []
                 )
-              )
-            }
+              );
+            }}
           >
             Generate
           </Button>
         </Col>
         <Col xs={24} sm={24} md={24} lg={10} xl={10}>
-          <DisplayGeneratedValues listShapleyValues={shapleyValues} />
+          <DisplayGeneratedValues listShapleyValues={shapleyValues ?? []} />
         </Col>
       </Row>
       <div className="upload">
@@ -127,17 +144,28 @@ const CalculatorCoalitionStructuresNotConnected = (
           cssClass="react-csv-input"
           label="Upload game definition from .csv file"
           onFileLoaded={handleForce}
-          parserOptions={papaparseOptions}
+          parserOptions={{
+            header: false,
+            dynamicTyping: true,
+            skipEmptyLines: true,
+          }}
         />
+      </div>
+      <div className="download">
+        <Button onClick={handleDownloadGameDefinition}>
+          Download Game Definition
+        </Button>
       </div>
     </div>
   );
 };
+
 const mapStateToProps = (state: { aplication: Store }): CoalitionsGame => {
   const { coalitions } = state.aplication;
   return {
     nrOfPlayes: coalitions?.nrOfPlayes,
-    gameDefinition: coalitions?.gameDefinition,
+    coalitions: coalitions?.coalitions,
+    functionOfCoalitions: coalitions?.functionOfCoalitions,
     shapleyValues: coalitions?.shapleyValues,
   };
 };
@@ -145,14 +173,16 @@ const mapStateToProps = (state: { aplication: Store }): CoalitionsGame => {
 const mapDispatchToProps = (
   dispatch: (arg0: {
     type: string;
-    payload: number | number[] | CoalitionsGameDefinition;
+    payload: number | number[] | number[][];
   }) => any
 ) => {
   return {
     setCoalitionsNumberOfplayers: (nrOfPlayes: number) =>
       dispatch(setCoalitionsNumberOfplayers(nrOfPlayes)),
-    setCoalitionsGameDefinition: (gameDefinition: CoalitionsGameDefinition) =>
-      dispatch(setCoalitionsGameDefinition(gameDefinition)),
+    setCoalitionsCoalitions: (coalitions: number[][]) =>
+      dispatch(setCoalitionsCoalitions(coalitions)),
+    setCoalitionsFunctionOfCoalitions: (values: number[]) =>
+      dispatch(setCoalitionsFunctionOfCoalitions(values)),
     setCoalitionsShapleyValues: (shapleyValues: number[]) =>
       dispatch(setCoalitionsShapleyValues(shapleyValues)),
   };

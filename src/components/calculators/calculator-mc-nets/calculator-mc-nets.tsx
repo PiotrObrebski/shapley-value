@@ -1,6 +1,6 @@
 import { Button, Col, Collapse, Row } from "antd"
 import { useState } from "react"
-import { calculateMCNetsShapleyValues } from "../../../utilities/calculationg-functions"
+import { calculateMCNetsShapleyValues } from "../../../utilities/calculation-functions"
 import DisplayGeneratedValues from "../../shared-components/display-generated-values"
 import NumberOfPlayersForm from "../../shared-components/number-of-players-input"
 import { AddMCNetsRule } from "./add-mc-nets-rule/add-mc-nets-rule"

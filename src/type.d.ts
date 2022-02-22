@@ -5,13 +5,10 @@ interface Store {
 }
 interface CoalitionsGame {
   nrOfPlayes?: number;
-  gameDefinition?: CoalitionsGameDefinition;
+  coalitions?: number[][];
+  functionOfCoalitions?: number[];
   shapleyValues?: number[];
 }
-type CoalitionsGameDefinition = {
-  coalitions: number[][];
-  values: number[]
-};
 interface McNetsGame {
   nrOfPlayes?: number;
 }
