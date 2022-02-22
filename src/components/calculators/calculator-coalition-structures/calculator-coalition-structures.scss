@@ -27,6 +27,25 @@
     margin: 24px calc(50% - 45px);
     box-sizing: border-box;
   }
+  .upload {
+    text-align: center;
+    padding: 15px;
+    margin: 10px auto;
+  }
+  
+  .csv-input {
+    padding: 10px;
+    display: block;
+    margin: 15px auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .upload p {
+    padding-top: 10px;
+    color: #666;
+  }
+  
   @media (max-width: 575px) {
     .ant-form .ant-form-item .ant-form-item-label,
     .ant-form .ant-form-item .ant-form-item-control {
