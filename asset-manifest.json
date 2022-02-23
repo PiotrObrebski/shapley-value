@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/shapley-value/static/css/main.3e9d881b.chunk.css",
-    "main.js": "/shapley-value/static/js/main.0dcd5942.chunk.js",
-    "main.js.map": "/shapley-value/static/js/main.0dcd5942.chunk.js.map",
-    "runtime-main.js": "/shapley-value/static/js/runtime-main.9e9c2792.js",
-    "runtime-main.js.map": "/shapley-value/static/js/runtime-main.9e9c2792.js.map",
+    "main.css": "/shapley-value/static/css/main.6c9f6681.chunk.css",
+    "main.js": "/shapley-value/static/js/main.115ba06f.chunk.js",
+    "main.js.map": "/shapley-value/static/js/main.115ba06f.chunk.js.map",
+    "runtime-main.js": "/shapley-value/static/js/runtime-main.97c725d7.js",
+    "runtime-main.js.map": "/shapley-value/static/js/runtime-main.97c725d7.js.map",
     "static/css/2.786ae0dd.chunk.css": "/shapley-value/static/css/2.786ae0dd.chunk.css",
-    "static/js/2.9ce398c4.chunk.js": "/shapley-value/static/js/2.9ce398c4.chunk.js",
-    "static/js/2.9ce398c4.chunk.js.map": "/shapley-value/static/js/2.9ce398c4.chunk.js.map",
-    "static/js/3.2fa66e30.chunk.js": "/shapley-value/static/js/3.2fa66e30.chunk.js",
-    "static/js/3.2fa66e30.chunk.js.map": "/shapley-value/static/js/3.2fa66e30.chunk.js.map",
+    "static/js/2.e2926393.chunk.js": "/shapley-value/static/js/2.e2926393.chunk.js",
+    "static/js/2.e2926393.chunk.js.map": "/shapley-value/static/js/2.e2926393.chunk.js.map",
+    "static/js/3.9b75dfd3.chunk.js": "/shapley-value/static/js/3.9b75dfd3.chunk.js",
+    "static/js/3.9b75dfd3.chunk.js.map": "/shapley-value/static/js/3.9b75dfd3.chunk.js.map",
     "index.html": "/shapley-value/index.html",
     "static/css/2.786ae0dd.chunk.css.map": "/shapley-value/static/css/2.786ae0dd.chunk.css.map",
-    "static/css/main.3e9d881b.chunk.css.map": "/shapley-value/static/css/main.3e9d881b.chunk.css.map",
-    "static/js/2.9ce398c4.chunk.js.LICENSE.txt": "/shapley-value/static/js/2.9ce398c4.chunk.js.LICENSE.txt"
+    "static/css/main.6c9f6681.chunk.css.map": "/shapley-value/static/css/main.6c9f6681.chunk.css.map",
+    "static/js/2.e2926393.chunk.js.LICENSE.txt": "/shapley-value/static/js/2.e2926393.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.9e9c2792.js",
+    "static/js/runtime-main.97c725d7.js",
     "static/css/2.786ae0dd.chunk.css",
-    "static/js/2.9ce398c4.chunk.js",
-    "static/css/main.3e9d881b.chunk.css",
-    "static/js/main.0dcd5942.chunk.js"
+    "static/js/2.e2926393.chunk.js",
+    "static/css/main.6c9f6681.chunk.css",
+    "static/js/main.115ba06f.chunk.js"
   ]
 }
