@@ -1,4 +1,3 @@
-.calculator-coalition-structures {
   .coalition-structures-input,
   .display-generated-values {
     max-width: 400px;
@@ -46,4 +45,3 @@
       margin: 0 8px 0 2px;
     }
   }
-}

@@ -1,6 +1,7 @@
+import React from 'react'
 import { Button, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
-import './calculator-coalition-structures.scss';
+import './calculator-coalition-structures.css';
 import { calculateAllShapleyValues, generateCoalitions, generateCoalitionOfN } from '../../../utilities/calculationg-functions';
 import CoalitionStructuresInput from './coalition-structures-input';
 import NumberOfPlayersForm from '../../shared-components/number-of-players-input';

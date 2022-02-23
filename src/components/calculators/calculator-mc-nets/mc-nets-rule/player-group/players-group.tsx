@@ -1,5 +1,6 @@
+import React from 'react'
 import { Checkbox } from "antd"
-import './player-group.scss'
+import './player-group.css'
 
 interface IPlayersGroupprops {
   options: string[]

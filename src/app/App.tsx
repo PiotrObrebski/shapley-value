@@ -1,3 +1,4 @@
+import React from 'react'
 import './App.css';
 import 'antd/dist/antd.css';
 import { Provider } from 'react-redux';
@@ -10,10 +11,10 @@ const App = (): JSX.Element => {
 
   return (
     <Provider store={store}>
-    <div className="app">
-      <AppHeader/>
-      <AppBody/>
-    </div>
+      <div className="app">
+        <AppHeader />
+        <AppBody />
+      </div>
     </Provider>
   );
 }

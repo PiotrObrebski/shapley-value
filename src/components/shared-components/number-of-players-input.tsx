@@ -1,3 +1,4 @@
+import React from 'react'
 import { Form, InputNumber } from "antd"
 export interface INumberOfPlayersForm {
   message?: string

@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from 'react';
 import NumberOfPlayersForm from '../../shared-components/number-of-players-input';
 import { FunctionDefinitionInput } from './function-definition-input';

@@ -66,6 +66,7 @@ export const generateCoalitionOfN = (event: number) => Array.from({ length: even
 export const calculatePositivePlayersMarginalContribution = (positive: number, negative: number, value: number): number => {
   return value * factorial(positive - 1) * factorial(negative) / factorial(positive + negative)
 }
+
 export const calculateNegativePlayersMarginalContribution = (positive: number, negative: number, value: number): number => {
   return -1 * value * (factorial(negative - 1) * factorial(positive)) / factorial(positive + negative)
 }

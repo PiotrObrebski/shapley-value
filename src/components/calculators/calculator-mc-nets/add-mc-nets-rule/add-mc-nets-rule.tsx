@@ -1,3 +1,4 @@
+import React from 'react'
 import { PlusOutlined } from "@ant-design/icons"
 import { Button, Col, Row } from "antd"
 import { IMCNetsRule } from "../calculator-mc-nets"

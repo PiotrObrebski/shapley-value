@@ -1,4 +1,4 @@
-
+import React from 'react'
 import { Table } from "antd";
 import Column from "antd/lib/table/Column";
 

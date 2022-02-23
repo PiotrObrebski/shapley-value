@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button, Col, Collapse, Row } from "antd"
 import { useState } from "react"
 import { calculateMCNetsShapleyValues } from "../../../utilities/calculationg-functions"
@@ -5,7 +6,7 @@ import DisplayGeneratedValues from "../../shared-components/display-generated-va
 import NumberOfPlayersForm from "../../shared-components/number-of-players-input"
 import { AddMCNetsRule } from "./add-mc-nets-rule/add-mc-nets-rule"
 import { MCNetsRule } from "./mc-nets-rule/mc-nets-rule"
-import './calculator-mc-nets.scss'
+import './calculator-mc-nets.css'
 
 export interface IMCNetsRule {
   positivePlayers: string[]

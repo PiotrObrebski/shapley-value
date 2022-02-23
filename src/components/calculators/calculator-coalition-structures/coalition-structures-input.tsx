@@ -1,3 +1,4 @@
+import React from 'react'
 import { Table, InputNumber } from "antd";
 import Column from "antd/lib/table/Column";
 
@@ -17,7 +18,7 @@ export const CoalitionStructuresInput = (props: ICoalitionStructuresInputProps):
 
   const columns = [
     {
-      title: 'Coalition Structure',
+      title: 'Coalition',
       dataIndex: 'coalition',
       key: 'coalition',
       align: 'right' as 'left' | 'right' | 'center',
