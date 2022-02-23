@@ -16,9 +16,13 @@ import {
   setCoalitionsFunctionOfCoalitions,
   setCoalitionsNumberOfplayers,
   setCoalitionsShapleyValues,
+  setMCNetsNumberOfplayers,
+  setMCNetsRules,
 } from "../../../redux/actions";
+import { TabsKeys } from "../../layout/body/app-body/app-body";
 
 interface ICalculatorCoalitionStructuresProps extends CoalitionsGame {
+  setActiveTabKey: React.Dispatch<React.SetStateAction<TabsKeys>>,
   setCoalitionsNumberOfplayers: (nrOfPlayes: number) => {
     type: string;
     payload: number;
@@ -35,6 +39,14 @@ interface ICalculatorCoalitionStructuresProps extends CoalitionsGame {
     type: string;
     payload: number[];
   };
+  setMCNetsRules: (rules: IMCNetsRule[]) => {
+    type: string;
+    payload: IMCNetsRule[];
+  };
+  setMCNetsNumberOfplayers: (nrOfPlayes: number) => {
+    type: string;
+    payload: number[];
+  };
 }
 
 const CalculatorCoalitionStructuresNotConnected = (
@@ -45,10 +57,12 @@ const CalculatorCoalitionStructuresNotConnected = (
     coalitions,
     functionOfCoalitions,
     shapleyValues,
+    setActiveTabKey,
     setCoalitionsNumberOfplayers,
     setCoalitionsCoalitions,
     setCoalitionsFunctionOfCoalitions,
     setCoalitionsShapleyValues,
+    setMCNetsRules
   } = props;
   const [grandCoalition, setGrandCalition] = useState<number[]>(
     nrOfPlayes ? generateCoalitionOfN(nrOfPlayes) : []
@@ -106,6 +120,26 @@ const CalculatorCoalitionStructuresNotConnected = (
     window.open(encodeURI(csvContent));
   };
   const translateToMCNets = () => {
+    const newRules: IMCNetsRule[] = []
+    let newNumberOfPlayers = 0
+    functionOfCoalitions
+      ?.forEach((value, index) => {
+        if (value) {
+          const coalition = coalitions?.[index]?.map(String) ?? []
+          newNumberOfPlayers =
+            coalition.length > newNumberOfPlayers
+              ? Math.max(...(coalitions?.[index] ?? []))
+              : newNumberOfPlayers
+          newRules.push({
+            positivePlayers: coalitions?.[index]?.map(String) ?? [],
+            negativePlayers: [],
+            value: value
+          })
+        }
+      })
+    setMCNetsRules(newRules)
+    setMCNetsNumberOfplayers(newNumberOfPlayers)
+    setActiveTabKey('mc-nets')
   }
   return (
     <div className="calculator-coalition-structures">
@@ -183,7 +217,7 @@ const mapStateToProps = (state: { aplication: Store }): CoalitionsGame => {
 const mapDispatchToProps = (
   dispatch: (arg0: {
     type: string;
-    payload: number | number[] | number[][];
+    payload: number | number[] | number[][] | IMCNetsRule[];
   }) => any
 ) => {
   return {
@@ -195,6 +229,10 @@ const mapDispatchToProps = (
       dispatch(setCoalitionsFunctionOfCoalitions(values)),
     setCoalitionsShapleyValues: (shapleyValues: number[]) =>
       dispatch(setCoalitionsShapleyValues(shapleyValues)),
+    setMCNetsRules: (rules: IMCNetsRule[]) =>
+      dispatch(setMCNetsRules(rules)),
+    setMCNetsNumberOfplayers: (nrOfPlayes: number) =>
+      dispatch(setMCNetsNumberOfplayers(nrOfPlayes))
   };
 };
 export const CalculatorCoalitionStructures = connect(

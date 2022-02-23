@@ -6,15 +6,16 @@ import {
   CalculatorCoalitionStructures,
 } from '../../../calculators/calculator-coalition-structures/calculator-coalition-structures';
 import { CalculatorMCNets } from '../../../calculators/calculator-mc-nets/calculator-mc-nets';
+import { useState } from 'react';
 
 const { TabPane } = Tabs
-
+export type TabsKeys = 'coalition' | 'function' | 'mc-nets'
 export const AppBody = (): JSX.Element => {
-
+  const [activeTabKey, setActiveTabKey] = useState<TabsKeys>('coalition')
   return (
-    <Tabs centered>
+    <Tabs activeKey={activeTabKey} onTabClick={(key: string) => setActiveTabKey(key as TabsKeys)} centered>
       <TabPane tab="Coalition structures definition" key="coalition">
-        <CalculatorCoalitionStructures />
+        <CalculatorCoalitionStructures setActiveTabKey={setActiveTabKey} />
       </TabPane >
       <TabPane tab="Function generating values" key="function" disabled>
         <CalculatorFunctionDefinition />
