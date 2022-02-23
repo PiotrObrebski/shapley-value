@@ -116,6 +116,24 @@ const CalculatorCoalitionStructuresNotConnected = (
       <Row justify="center">
         <Col xs={24} sm={24} md={24} lg={10} xl={10}>
           <CoalitionStructuresInput />
+          <div className="upload">
+            <CSVReader
+              cssClass="react-csv-input"
+              label={<span>Upload game definition from .csv file </span>}
+              onFileLoaded={handleForce}
+              inputName="input2"
+              parserOptions={{
+                header: false,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+              }}
+            />
+          </div>
+          <div className="download">
+            <Button onClick={handleDownloadGameDefinition}>
+              Download Game Definition
+            </Button>
+          </div>
         </Col>
         <Col xs={24} sm={24} md={24} lg={4} xl={4}>
           <Button
@@ -139,23 +157,6 @@ const CalculatorCoalitionStructuresNotConnected = (
           <DisplayGeneratedValues listShapleyValues={shapleyValues ?? []} />
         </Col>
       </Row>
-      <div className="upload">
-        <CSVReader
-          cssClass="react-csv-input"
-          label="Upload game definition from .csv file"
-          onFileLoaded={handleForce}
-          parserOptions={{
-            header: false,
-            dynamicTyping: true,
-            skipEmptyLines: true,
-          }}
-        />
-      </div>
-      <div className="download">
-        <Button onClick={handleDownloadGameDefinition}>
-          Download Game Definition
-        </Button>
-      </div>
     </div>
   );
 };
