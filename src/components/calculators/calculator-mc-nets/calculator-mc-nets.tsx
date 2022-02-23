@@ -6,18 +6,17 @@ import NumberOfPlayersForm from "../../shared-components/number-of-players-input
 import { AddMCNetsRule } from "./add-mc-nets-rule/add-mc-nets-rule"
 import { MCNetsRule } from "./mc-nets-rule/mc-nets-rule"
 import './calculator-mc-nets.scss'
+import { setMCNetsNumberOfplayers, setMCNetsRules, setMCNetsShapleyValues } from "../../../redux/actions"
+import { connect } from "react-redux"
 
-export interface IMCNetsRule {
-  positivePlayers: string[]
-  negativePlayers: string[]
-  value: number
+interface ICalculatorMCNetsProps extends McNetsGame {
+  setMCNetsNumberOfplayers: (nrOfPlayes: number) => void
+  setMCNetsShapleyValues: (shapleyValues: number[]) => void
 }
 
-export const CalculatorMCNets = (): JSX.Element => {
-  const [nrPlayers, setNrPlayers] = useState<number>(0)
-  const [rules, setRules] = useState<IMCNetsRule[]>([])
-  const [shapleyValues, setShapleyValues] = useState<number[]>([])
-  const handleNumberOfPlayesChange = (event: number) => setNrPlayers(event)
+export const CalculatorMCNetsNotConnected = (props: ICalculatorMCNetsProps): JSX.Element => {
+  const { nrOfPlayes, rules, shapleyValues, setMCNetsNumberOfplayers, setMCNetsShapleyValues } = props
+  const handleNumberOfPlayesChange = (event: number) => setMCNetsNumberOfplayers(event)
   const [activeKeys, setActiveKeys] = useState<string[]>(['1', '2'])
   return (
     <div className="calculator-mc-nets">
@@ -31,13 +30,13 @@ export const CalculatorMCNets = (): JSX.Element => {
               />
             </Col>
             <Col span={12}>
-              <AddMCNetsRule rules={rules} setRules={setRules} />
+              <AddMCNetsRule />
             </Col>
           </Row>
 
           <div className="mc-nets-rules">
-            {rules.map((rule, index) => {
-              return <MCNetsRule key={index} index={index} rules={rules} setRules={setRules} nrPlayers={nrPlayers} />
+            {rules?.map((_rule, index) => {
+              return <MCNetsRule key={index} index={index} />
             })}
           </div>
         </Collapse.Panel>
@@ -45,20 +44,53 @@ export const CalculatorMCNets = (): JSX.Element => {
           <Row justify="center" gutter={32}>
             <Button
               type="primary"
-              disabled={!nrPlayers}
+              disabled={!nrOfPlayes}
               className="generate-button"
               onClick={() => {
-                setShapleyValues(calculateMCNetsShapleyValues(rules, nrPlayers))
+                setMCNetsShapleyValues(calculateMCNetsShapleyValues(rules ?? [], nrOfPlayes ?? 0))
                 const tmpActiveKeys = activeKeys.includes('3') ? activeKeys : [...activeKeys, '3']
                 setActiveKeys(tmpActiveKeys)
               }}>
               Calculate
-            </Button></Row>
+            </Button>
+          </Row>
         </Collapse.Panel>
         <Collapse.Panel header="Shapley Values" key="3" className="values-panel">
-          <DisplayGeneratedValues listShapleyValues={shapleyValues} tableMaxHeight={200} />
+          <DisplayGeneratedValues listShapleyValues={shapleyValues ?? []} tableMaxHeight={200} />
         </Collapse.Panel>
       </Collapse>
     </div>
   )
 }
+
+const mapStateToProps = (state: { aplication: Store }): McNetsGame => {
+  const { nrOfPlayes, rules, shapleyValues } = state.aplication.mcNets ?? {};
+  return {
+    nrOfPlayes: nrOfPlayes,
+    rules: rules,
+    shapleyValues: shapleyValues,
+  };
+};
+
+const mapDispatchToProps = (
+  dispatch: (arg0: {
+    type: string;
+    payload: number | number[] | IMCNetsRule[];
+  }) => any
+): {
+  setMCNetsNumberOfplayers: (nrOfPlayes: number) => void
+  setMCNetsShapleyValues: (shapleyValues: number[]) => void
+} => {
+  return {
+    setMCNetsNumberOfplayers: (nrOfPlayes: number) =>
+      dispatch(setMCNetsNumberOfplayers(nrOfPlayes)),
+    setMCNetsShapleyValues: (shapleyValues: number[]) =>
+      dispatch(setMCNetsShapleyValues(shapleyValues))
+  };
+};
+export const CalculatorMCNets = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CalculatorMCNetsNotConnected);
+
+export default CalculatorMCNets

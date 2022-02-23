@@ -11,6 +11,14 @@ interface CoalitionsGame {
 }
 interface McNetsGame {
   nrOfPlayes?: number;
+  rules?: IMCNetsRule[]
+  shapleyValues?: number[];
+}
+
+interface IMCNetsRule {
+  positivePlayers: string[]
+  negativePlayers: string[]
+  value: number
 }
 interface GraphGame {
   nrOfPlayes?: number;

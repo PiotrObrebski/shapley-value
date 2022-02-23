@@ -32,6 +32,9 @@
   .upload, .download {
     text-align: center;
     margin: 10px auto;
+    .csv-label{
+      display: block;
+    }
   }
   
   @media (max-width: 575px) {

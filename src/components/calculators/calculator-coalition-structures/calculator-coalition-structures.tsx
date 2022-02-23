@@ -106,7 +106,6 @@ const CalculatorCoalitionStructuresNotConnected = (
     window.open(encodeURI(csvContent));
   };
   const translateToMCNets = () => {
-    console.log(coalitions, functionOfCoalitions)
   }
   return (
     <div className="calculator-coalition-structures">
@@ -172,12 +171,12 @@ const CalculatorCoalitionStructuresNotConnected = (
 };
 
 const mapStateToProps = (state: { aplication: Store }): CoalitionsGame => {
-  const { coalitions } = state.aplication;
+  const { nrOfPlayes, coalitions, functionOfCoalitions, shapleyValues } = state.aplication.coalitions || {};
   return {
-    nrOfPlayes: coalitions?.nrOfPlayes,
-    coalitions: coalitions?.coalitions,
-    functionOfCoalitions: coalitions?.functionOfCoalitions,
-    shapleyValues: coalitions?.shapleyValues,
+    nrOfPlayes: nrOfPlayes,
+    coalitions: coalitions,
+    functionOfCoalitions: functionOfCoalitions,
+    shapleyValues: shapleyValues,
   };
 };
 

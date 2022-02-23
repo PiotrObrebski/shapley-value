@@ -39,3 +39,33 @@ export const setCoalitionsShapleyValues = (
   type: ActionTypes.SET_COALITIONS_SHAPLEY_VALUES,
   payload: shapleyValues,
 });
+
+export const setMCNetsNumberOfplayers = (
+  nrOfPlayes: number
+): {
+  type: string;
+  payload: number;
+} => ({
+  type: ActionTypes.SET_MCNETS_NUMBER_OF_PLAYERS,
+  payload: nrOfPlayes,
+});
+
+export const setMCNetsRules = (
+  rules: IMCNetsRule[]
+): {
+  type: string;
+  payload: IMCNetsRule[];
+} => ({
+  type: ActionTypes.SET_MCNETS_RULES,
+  payload: rules,
+});
+
+export const setMCNetsShapleyValues = (
+  shapleyValues: number[]
+): {
+  type: string;
+  payload: number[];
+} => ({
+  type: ActionTypes.SET_MCNETS_SHAPLEY_VALUES,
+  payload: shapleyValues,
+});

@@ -1,5 +1,4 @@
 import _ from "underscore";
-import { IMCNetsRule } from "../components/calculators/calculator-mc-nets/calculator-mc-nets";
 
 export const indexOfArrayInArray = (
   arrayOfArrays: number[][],

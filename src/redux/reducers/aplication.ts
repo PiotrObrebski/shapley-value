@@ -39,6 +39,30 @@ export const aplication = (
           shapleyValues: action.payload,
         },
       };
+    case ActionTypes.SET_MCNETS_NUMBER_OF_PLAYERS:
+      return {
+        ...state,
+        mcNets: {
+          ...state.mcNets,
+          nrOfPlayes: action.payload,
+        },
+      };
+    case ActionTypes.SET_MCNETS_RULES:
+      return {
+        ...state,
+        mcNets: {
+          ...state.mcNets,
+          rules: action.payload,
+        },
+      };
+    case ActionTypes.SET_MCNETS_SHAPLEY_VALUES:
+      return {
+        ...state,
+        mcNets: {
+          ...state.mcNets,
+          shapleyValues: action.payload,
+        },
+      };
     default:
       return state;
   }
