@@ -43,8 +43,8 @@ export const coalitionsGenerateShapleyValue = (
       coalitionWithoutPlayer.splice(coalition.indexOf(player), 1);
       const valueOfCoalitionWithoutPlayer =
         funcOfCoalitions[
-          indexOfArrayInArray(coalitions, coalitionWithoutPlayer)
-        ];
+        indexOfArrayInArray(coalitions, coalitionWithoutPlayer)
+        ] ?? 0;
       const numberOfPermutationsC = factorial(coalitionWithoutPlayer.length);
       const numberOfPermutationsA = factorial(
         players.length - coalitionWithoutPlayer.length - 1
@@ -53,7 +53,7 @@ export const coalitionsGenerateShapleyValue = (
         (numberOfPermutationsA * numberOfPermutationsC) /
         factorial(players.length);
       shapleyValue +=
-        (valueOfCoalitionWithPlayer - valueOfCoalitionWithoutPlayer) *
+        (valueOfCoalitionWithPlayer - (valueOfCoalitionWithoutPlayer ?? 0)) *
         contrCount;
     }
   });

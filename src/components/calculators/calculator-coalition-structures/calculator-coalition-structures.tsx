@@ -105,6 +105,9 @@ const CalculatorCoalitionStructuresNotConnected = (
 
     window.open(encodeURI(csvContent));
   };
+  const translateToMCNets = () => {
+    console.log(coalitions, functionOfCoalitions)
+  }
   return (
     <div className="calculator-coalition-structures">
       <NumberOfPlayersForm
@@ -135,22 +138,29 @@ const CalculatorCoalitionStructuresNotConnected = (
             </Button>
           </div>
         </Col>
-        <Col xs={24} sm={24} md={24} lg={4} xl={4}>
+        <Col className="buttons-col" xs={24} sm={24} md={24} lg={4} xl={4}>
           <Button
             type="primary"
             disabled={!grandCoalition.length}
             className="generate-button"
-            onClick={() => {
+            onClick={() =>
               setCoalitionsShapleyValues(
                 calculateAllShapleyValues(
                   grandCoalition,
                   coalitions ?? [],
                   functionOfCoalitions ?? []
                 )
-              );
-            }}
+              )
+            }
           >
-            Generate
+            Generate Shapley Values
+          </Button>
+          <Button
+            disabled={!grandCoalition.length}
+            className="generate-button"
+            onClick={translateToMCNets}
+          >
+            Translate to MC Nets
           </Button>
         </Col>
         <Col xs={24} sm={24} md={24} lg={10} xl={10}>

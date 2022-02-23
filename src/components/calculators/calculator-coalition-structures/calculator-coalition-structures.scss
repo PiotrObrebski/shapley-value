@@ -22,12 +22,13 @@
   .ScrollbarsCustom-Track.ScrollbarsCustom-TrackY {
     width: 7px !important;
   }
-  .ant-btn.generate-button {
-    width: 90px;
-    margin: 24px calc(50% - 45px);
-    box-sizing: border-box;
+  .buttons-col{
+    display: flex;
+    flex-direction: column;
+    .ant-btn.generate-button {
+      margin: 10px 0;
+    }
   }
-
   .upload, .download {
     text-align: center;
     margin: 10px auto;
