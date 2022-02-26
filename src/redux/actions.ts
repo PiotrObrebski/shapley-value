@@ -40,15 +40,17 @@ export const setCoalitionsShapleyValues = (
   payload: shapleyValues,
 });
 
-export const setMCNetsNumberOfplayers = (
+export const setMCNetsNumberOfPlayers = (
   nrOfPlayes: number
 ): {
   type: string;
   payload: number;
-} => ({
-  type: ActionTypes.SET_MCNETS_NUMBER_OF_PLAYERS,
-  payload: nrOfPlayes,
-});
+} => {
+  return {
+    type: ActionTypes.SET_MCNETS_NUMBER_OF_PLAYERS,
+    payload: nrOfPlayes,
+  };
+};
 
 export const setMCNetsRules = (
   rules: IMCNetsRule[]

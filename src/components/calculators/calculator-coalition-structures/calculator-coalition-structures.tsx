@@ -16,13 +16,13 @@ import {
   setCoalitionsFunctionOfCoalitions,
   setCoalitionsNumberOfplayers,
   setCoalitionsShapleyValues,
-  setMCNetsNumberOfplayers,
+  setMCNetsNumberOfPlayers,
   setMCNetsRules,
 } from "../../../redux/actions";
 import { TabsKeys } from "../../layout/body/app-body/app-body";
 
 interface ICalculatorCoalitionStructuresProps extends CoalitionsGame {
-  setActiveTabKey: React.Dispatch<React.SetStateAction<TabsKeys>>,
+  setActiveTabKey: React.Dispatch<React.SetStateAction<TabsKeys>>;
   setCoalitionsNumberOfplayers: (nrOfPlayes: number) => {
     type: string;
     payload: number;
@@ -43,7 +43,7 @@ interface ICalculatorCoalitionStructuresProps extends CoalitionsGame {
     type: string;
     payload: IMCNetsRule[];
   };
-  setMCNetsNumberOfplayers: (nrOfPlayes: number) => {
+  setMCNetsNumberOfPlayers: (nrOfPlayes: number) => {
     type: string;
     payload: number[];
   };
@@ -62,7 +62,8 @@ const CalculatorCoalitionStructuresNotConnected = (
     setCoalitionsCoalitions,
     setCoalitionsFunctionOfCoalitions,
     setCoalitionsShapleyValues,
-    setMCNetsRules
+    setMCNetsNumberOfPlayers,
+    setMCNetsRules,
   } = props;
   const [grandCoalition, setGrandCalition] = useState<number[]>(
     nrOfPlayes ? generateCoalitionOfN(nrOfPlayes) : []
@@ -120,27 +121,29 @@ const CalculatorCoalitionStructuresNotConnected = (
     window.open(encodeURI(csvContent));
   };
   const translateToMCNets = () => {
-    const newRules: IMCNetsRule[] = []
-    let newNumberOfPlayers = 0
-    functionOfCoalitions
-      ?.forEach((value, index) => {
-        if (value) {
-          const coalition = coalitions?.[index]?.map(String) ?? []
-          newNumberOfPlayers =
-            coalition.length > newNumberOfPlayers
-              ? Math.max(...(coalitions?.[index] ?? []))
-              : newNumberOfPlayers
-          newRules.push({
-            positivePlayers: coalitions?.[index]?.map(String) ?? [],
-            negativePlayers: [],
-            value: value
-          })
-        }
-      })
-    setMCNetsRules(newRules)
-    setMCNetsNumberOfplayers(newNumberOfPlayers)
-    setActiveTabKey('mc-nets')
-  }
+    const newRules: IMCNetsRule[] = [];
+    let newNumberOfPlayers = 0;
+    functionOfCoalitions?.forEach((value, index) => {
+      if (value) {
+        const highestPlayerInCoalition = Math.max(
+          ...(coalitions?.[index] ?? [])
+        );
+        newNumberOfPlayers =
+          highestPlayerInCoalition > newNumberOfPlayers
+            ? highestPlayerInCoalition
+            : newNumberOfPlayers;
+        newRules.push({
+          positivePlayers: coalitions?.[index]?.map(String) ?? [],
+          negativePlayers: [],
+          value: value,
+        });
+      }
+    });
+    setMCNetsNumberOfPlayers(newNumberOfPlayers);
+    setMCNetsRules(newRules);
+    setActiveTabKey("mc-nets");
+  };
+
   return (
     <div className="calculator-coalition-structures">
       <NumberOfPlayersForm
@@ -205,7 +208,8 @@ const CalculatorCoalitionStructuresNotConnected = (
 };
 
 const mapStateToProps = (state: { aplication: Store }): CoalitionsGame => {
-  const { nrOfPlayes, coalitions, functionOfCoalitions, shapleyValues } = state.aplication.coalitions || {};
+  const { nrOfPlayes, coalitions, functionOfCoalitions, shapleyValues } =
+    state.aplication.coalitions || {};
   return {
     nrOfPlayes: nrOfPlayes,
     coalitions: coalitions,
@@ -229,10 +233,9 @@ const mapDispatchToProps = (
       dispatch(setCoalitionsFunctionOfCoalitions(values)),
     setCoalitionsShapleyValues: (shapleyValues: number[]) =>
       dispatch(setCoalitionsShapleyValues(shapleyValues)),
-    setMCNetsRules: (rules: IMCNetsRule[]) =>
-      dispatch(setMCNetsRules(rules)),
-    setMCNetsNumberOfplayers: (nrOfPlayes: number) =>
-      dispatch(setMCNetsNumberOfplayers(nrOfPlayes))
+    setMCNetsRules: (rules: IMCNetsRule[]) => dispatch(setMCNetsRules(rules)),
+    setMCNetsNumberOfPlayers: (nrOfPlayes: number) =>
+      dispatch(setMCNetsNumberOfPlayers(nrOfPlayes)),
   };
 };
 export const CalculatorCoalitionStructures = connect(
