@@ -1,12 +1,13 @@
 import React from 'react'
 import { Form, InputNumber } from "antd"
 export interface INumberOfPlayersForm {
+  numberOfPlayers?: number
   message?: string
   maxValue: number
   handleNumberOfPlayesChange?: (event: number) => void
 }
 export const NumberOfPlayersForm = (props: INumberOfPlayersForm): JSX.Element => {
-  const { message, maxValue, handleNumberOfPlayesChange } = props
+  const { numberOfPlayers, message, maxValue, handleNumberOfPlayesChange } = props
   return <Form
     labelCol={{ span: 12 }}
     wrapperCol={{ span: 12 }}
@@ -20,6 +21,7 @@ export const NumberOfPlayersForm = (props: INumberOfPlayersForm): JSX.Element =>
         min={0}
         max={maxValue - 1}
         defaultValue={0}
+        value={numberOfPlayers}
         onChange={handleNumberOfPlayesChange}
       />
     </Form.Item>

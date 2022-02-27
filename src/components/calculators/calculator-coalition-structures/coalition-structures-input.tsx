@@ -1,20 +1,28 @@
 import React from 'react'
 import { Table, InputNumber } from "antd";
 import Column from "antd/lib/table/Column";
+import { connect } from "react-redux";
+import { setCoalitionsFunctionOfCoalitions } from "../../../redux/actions";
 
 export interface ICoalitionStructuresInputProps {
-  coalitionsArray: number[][]
-  functionOfCoalitions: number[]
-  setFunctionOfCoalitions: React.Dispatch<React.SetStateAction<number[]>>
+  coalitions?: number[][];
+  functionOfCoalitions?: number[];
+  setCoalitionsFunctionOfCoalitions: (values: number[]) => void;
 }
 
-export const CoalitionStructuresInput = (props: ICoalitionStructuresInputProps): JSX.Element => {
-  const { coalitionsArray, functionOfCoalitions, setFunctionOfCoalitions } = props
-  const dataSource = coalitionsArray?.map((coalition, index) => ({
+export const CoalitionStructuresInputNotConnected = (
+  props: ICoalitionStructuresInputProps
+): JSX.Element => {
+  const {
+    coalitions,
+    functionOfCoalitions,
+    setCoalitionsFunctionOfCoalitions,
+  } = props;
+  const dataSource = coalitions?.map((coalition, index) => ({
     key: index,
-    coalition: coalition.length ? coalition.toString() : 'Ø',
+    coalition: coalition.length ? coalition.toString() : "Ø",
     value: 0,
-  }))
+  }));
 
   const columns = [
     {
@@ -24,20 +32,24 @@ export const CoalitionStructuresInput = (props: ICoalitionStructuresInputProps):
       align: 'right' as 'left' | 'right' | 'center',
     },
     {
-      title: 'Value',
-      dataIndex: 'value',
-      key: 'value',
-      render: (text: string, record: any) =>
+      title: "Value",
+      dataIndex: "value",
+      key: "value",
+      render: (text: string, record: any) => (
         <InputNumber
-          value={functionOfCoalitions[record.key]}
+          value={functionOfCoalitions?.[record.key]}
           defaultValue={0}
           onChange={(event: number) => {
-            const tmpFunction = [...functionOfCoalitions]
-            tmpFunction[record.key] = event
-            setFunctionOfCoalitions(tmpFunction)
-          }} />,
-      align: 'left' as 'left' | 'right' | 'center',
-    }
+            const tmpFunction = functionOfCoalitions
+              ? [...functionOfCoalitions]
+              : [];
+            tmpFunction[record.key] = event;
+            setCoalitionsFunctionOfCoalitions(tmpFunction);
+          }}
+        />
+      ),
+      align: "left" as "left" | "right" | "center",
+    },
   ];
 
   return (
@@ -49,9 +61,35 @@ export const CoalitionStructuresInput = (props: ICoalitionStructuresInputProps):
       scroll={{ y: 300 }}
       className="coalition-structures-input"
     >
-      {columns.map((column) => <Column {...column} />)}
+      {columns.map((column) => (
+        <Column {...column} />
+      ))}
     </Table>
-  )
-}
+  );
+};
 
-export default CoalitionStructuresInput
+const mapStateToProps = (state: {
+  aplication: Store;
+}): {
+  coalitions?: number[][];
+  functionOfCoalitions?: number[];
+} => {
+  return {
+    coalitions: state.aplication.coalitions?.coalitions,
+    functionOfCoalitions: state.aplication.coalitions?.functionOfCoalitions,
+  };
+};
+
+const mapDispatchToProps = (
+  dispatch: (arg0: { type: string; payload: number[] }) => any
+) => {
+  return {
+    setCoalitionsFunctionOfCoalitions: (values: number[]) =>
+      dispatch(setCoalitionsFunctionOfCoalitions(values)),
+  };
+};
+export const CoalitionStructuresInput = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CoalitionStructuresInputNotConnected);
+export default CoalitionStructuresInput;
