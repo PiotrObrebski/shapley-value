@@ -1,113 +1,50 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React, { useRef, useState } from "react";
+import { firstMissingPositive } from "../../../utilities/calculationg-functions";
 import {
   GraphView, // required
 } from "react-digraph";
 import {
   default as nodeConfig,
-  EMPTY_EDGE_TYPE,
   CUSTOM_EMPTY_TYPE,
   NODE_KEY,
-  POLY_TYPE,
-  SPECIAL_CHILD_SUBTYPE,
   SPECIAL_EDGE_TYPE,
-  SPECIAL_TYPE,
-  SKINNY_TYPE,
 } from "./config";
 
 import { get } from "lodash";
 
 const sample = {
-  edges: [
-    {
-      handleText: "5",
-      source: "1",
-      target: "2",
-      type: SPECIAL_EDGE_TYPE,
-    },
-  ],
+  edges: [],
   nodes: [
     {
       id: "1",
       title: "1",
       type: CUSTOM_EMPTY_TYPE,
-      x: 200,
-      y: 300,
-    },
-    {
-      id: "2",
-      title: "2",
-      type: CUSTOM_EMPTY_TYPE,
-      x: 400,
+      x: 300,
       y: 300,
     },
   ],
 };
 
-export default class Graph extends Component {
-  constructor(props) {
-    super(props);
-    this.customNodeRef = React.createRef();
-    this.state = {
-      graph: sample,
-      selected: {},
-    };
-  }
-
-  getNodeIndex(searchNode) {
-    return this.state.graph.nodes.findIndex((node) => {
+export const Graph = (props) => {
+  const [graph, setGraph] = useState(sample);
+  const [selected, setSelected] = useState({});
+  const [copied, setCopied] = useState({});
+  const [players, setPlayers] = useState(sample.nodes.length);
+  const [playersId, setPlayersId] = useState(sample.nodes.length);
+  const refElement = useRef();
+  
+  function getNodeIndex(searchNode) {
+    return graph.nodes.findIndex((node) => {
       return node[NODE_KEY] === searchNode[NODE_KEY];
     });
   }
 
   // Helper to find the index of a given edge
-  getEdgeIndex(searchEdge) {
-    return this.state.graph.edges.findIndex((edge) => {
+  const getEdgeIndex = (searchEdge) => {
+    return graph.edges.findIndex((edge) => {
       return (
         edge.source === searchEdge.source && edge.target === searchEdge.target
       );
-    });
-  }
-
-  // Given a nodeKey, return the corresponding node
-  getViewNode(nodeKey) {
-    const searchNode = {};
-
-    searchNode[NODE_KEY] = nodeKey;
-    const i = this.getNodeIndex(searchNode);
-
-    return this.state.graph.nodes[i];
-  }
-
-  addStartNode = (e) => {
-    const graph = this.state.graph;
-
-    // using a new array like this creates a new memory reference
-    // this will force a re-render
-    graph.nodes = [
-      {
-        id: Date.now(),
-        title: "Node A",
-        type: SPECIAL_TYPE,
-        x: e ? e.screenX : 0, //Figure out the correct coordinates to drop
-        y: e ? e.screenY : 0,
-      },
-      ...this.state.graph.nodes,
-    ];
-    this.setState({
-      graph,
-    });
-  };
-
-  deleteStartNode = () => {
-    const graph = this.state.graph;
-
-    graph.nodes.splice(0, 1);
-    // using a new array like this creates a new memory reference
-    // this will force a re-render
-    graph.nodes = [...this.state.graph.nodes];
-    this.setState({
-      graph,
     });
   };
 
@@ -117,17 +54,16 @@ export default class Graph extends Component {
 
   // Called by 'drag' handler, etc..
   // to sync updates from D3 with the graph
-  onUpdateNode = (viewNode) => {
-    const graph = this.state.graph;
-    const i = this.getNodeIndex(viewNode);
+  const onUpdateNode = (viewNode) => {
+    const tmpGraph = graph;
+    const i = getNodeIndex(viewNode);
 
-    graph.nodes[i] = viewNode;
-    this.setState({ graph });
+    tmpGraph.nodes[i] = viewNode;
+    setGraph(tmpGraph);
   };
 
   // Node 'mouseUp' handler
-  onSelectNode = (viewNode, event) => {
-    console.log("onSelectNode");
+  const onSelectNode = (viewNode, event) => {
     // const { id = "" } = event.target;
     const id = get(event, "target.id", "");
     if (id.includes("text")) {
@@ -135,37 +71,38 @@ export default class Graph extends Component {
     }
 
     // Deselect events will send Null viewNode
-    this.setState({ selected: viewNode });
+    setSelected(viewNode);
   };
 
   // Edge 'mouseUp' handler
-  onSelectEdge = (viewEdge) => {
-    console.log(viewEdge);
-
-    this.setState({ selected: viewEdge });
+  const onSelectEdge = (viewEdge) => {
+    setSelected(viewEdge);
   };
 
   // Updates the graph with a new node
-  onCreateNode = (x, y) => {
-    const graph = this.state.graph;
-
-    const type = CUSTOM_EMPTY_TYPE;
-
+  const onCreateNode = (x, y) => {
+    console.log(x, y);
+    const tmpGraph = graph;
+    const players = tmpGraph.nodes.map((element) => element.title);
+    const newPlayerNr = firstMissingPositive(players);
     const viewNode = {
-      id: Date.now(),
-      title: "",
-      type,
+      id: playersId + 1,
+      title: newPlayerNr,
+      type: CUSTOM_EMPTY_TYPE,
       x,
       y,
     };
-
-    graph.nodes = [...graph.nodes, viewNode];
-    this.setState({ graph });
+    setPlayers(newPlayerNr);
+    setPlayersId(playersId + 1);
+    tmpGraph.nodes = [...tmpGraph.nodes, viewNode];
+    setGraph(tmpGraph);
+    setSelected(viewNode);
   };
 
   // Deletes a node from the graph
-  onDeleteNode = (viewNode, nodeId, nodeArr) => {
-    const graph = this.state.graph;
+  const onDeleteNode = (viewNode, nodeId, nodeArr) => {
+    console.log(viewNode, nodeId, nodeArr);
+    const tmpGraph = graph;
     // Delete any connected edges
     const newEdges = graph.edges.filter((edge, i) => {
       return (
@@ -173,150 +110,120 @@ export default class Graph extends Component {
       );
     });
 
-    graph.nodes = nodeArr;
-    graph.edges = newEdges;
+    tmpGraph.nodes = nodeArr;
+    tmpGraph.edges = newEdges;
 
-    this.setState({ graph, selected: null });
+    setPlayers(players - 1);
+    setGraph(tmpGraph);
+    setSelected({});
   };
 
   // Creates a new node between two edges
-  onCreateEdge = (sourceViewNode, targetViewNode) => {
-    const graph = this.state.graph;
+  const onCreateEdge = (sourceViewNode, targetViewNode) => {
+    const tmpGraph = graph;
     // This is just an example - any sort of logic
     // could be used here to determine edge type
-    const type =
-      sourceViewNode.type === SPECIAL_TYPE
-        ? SPECIAL_EDGE_TYPE
-        : EMPTY_EDGE_TYPE;
 
     const viewEdge = {
       source: sourceViewNode[NODE_KEY],
       target: targetViewNode[NODE_KEY],
-      handleText: this.props.valueForEdge,
-      type,
+      handleText: props.valueForEdge,
+      type: SPECIAL_EDGE_TYPE,
     };
 
     // Only add the edge when the source node is not the same as the target
     if (viewEdge.source !== viewEdge.target) {
-      graph.edges = [...graph.edges, viewEdge];
-      this.setState({
-        graph,
-        selected: viewEdge,
-      });
+      tmpGraph.edges = [...tmpGraph.edges, viewEdge];
+
+      setGraph(tmpGraph);
+      setSelected(viewEdge);
     }
   };
 
   // Called when an edge is reattached to a different target.
-  onSwapEdge = (sourceViewNode, targetViewNode, viewEdge) => {
-    const graph = this.state.graph;
-    const i = this.getEdgeIndex(viewEdge);
+  const onSwapEdge = (sourceViewNode, targetViewNode, viewEdge) => {
+    const tmpGraph = graph;
+    const i = getEdgeIndex(viewEdge);
     const edge = JSON.parse(JSON.stringify(graph.edges[i]));
 
     edge.source = sourceViewNode[NODE_KEY];
     edge.target = targetViewNode[NODE_KEY];
-    graph.edges[i] = edge;
+    tmpGraph.edges[i] = edge;
     // reassign the array reference if you want the graph to re-render a swapped edge
-    graph.edges = [...graph.edges];
+    graph.edges = [...tmpGraph.edges];
 
-    this.setState({
-      graph,
-      selected: edge,
-    });
-  };
-
-  onContextMenu = () => {
-    console.log("right click");
+    setGraph(tmpGraph);
+    setSelected(edge);
   };
 
   // Called when an edge is deleted
-  onDeleteEdge = (viewEdge, edges) => {
-    const graph = this.state.graph;
+  const onDeleteEdge = (viewEdge, edges) => {
+    const tmpGraph = graph;
 
-    graph.edges = edges;
-    this.setState({
-      graph,
-      selected: null,
-    });
+    tmpGraph.edges = edges;
+
+    setGraph(tmpGraph);
+    setSelected(null);
   };
 
-  onCopySelected = () => {
-    if (this.state.selected.source) {
+  const onCopySelected = () => {
+    if (selected.source) {
       console.warn("Cannot copy selected edges, try selecting a node instead.");
 
       return;
     }
 
-    const x = this.state.selected.x + 10;
-    const y = this.state.selected.y + 10;
-
-    this.setState({
-      copiedNode: { ...this.state.selected, x, y },
-    });
+    const x = selected.x + 10;
+    const y = selected.y + 10;
+    setCopied({ ...selected, x, y });
   };
 
-  onPasteSelected = () => {
-    if (!this.state.copiedNode) {
+  const onPasteSelected = () => {
+    if (copied) {
       console.warn(
         "No node is currently in the copy queue. Try selecting a node and copying it with Ctrl/Command-C"
       );
     }
 
-    const graph = this.state.graph;
-    const newNode = { ...this.state.copiedNode, id: Date.now() };
+    const tmpGraph = graph;
+    const newNode = { ...copied, id: playersId + 1 };
 
-    graph.nodes = [...graph.nodes, newNode];
-    this.forceUpdate();
-  };
-
-  handleChangeLayoutEngineType = (event) => {
-    this.setState({
-      layoutEngineType: event.target.value,
-    });
-  };
-
-  onSelectPanNode = (event) => {
-    if (this.GraphView) {
-      this.GraphView.panToNode(event.target.value, true);
-    }
+    tmpGraph.nodes = [...tmpGraph.nodes, newNode];
+    setGraph(tmpGraph);
+    setPlayersId(playersId + 1);
   };
 
   /* Define custom graph editing methods here */
 
-  render() {
-    const nodes = this.state.graph.nodes;
-    const edges = this.state.graph.edges;
-    const selected = this.state.selected;
-
-    return (
-      <div id="graph" style={{ height: "50rem" }}>
-        <GraphView
-          allowMultiSelect={true}
-          showGraphControls={true}
-          gridSize="100rem"
-          gridDotSize={1}
-          renderNodeText={false}
-          ref="GraphView"
-          nodeKey={NODE_KEY}
-          nodes={nodes}
-          edges={edges}
-          selected={selected}
-          nodeTypes={nodeConfig.NodeTypes}
-          nodeSubtypes={nodeConfig.NodeSubtypes}
-          edgeTypes={nodeConfig.NodeTypes}
-          onSelectNode={this.onSelectNode}
-          onCreateNode={this.onCreateNode}
-          onUpdateNode={this.onUpdateNode}
-          onDeleteNode={this.onDeleteNode}
-          onSelectEdge={this.onSelectEdge}
-          onCreateEdge={this.onCreateEdge}
-          onSwapEdge={this.onSwapEdge}
-          onDeleteEdge={this.onDeleteEdge}
-          onCopySelected={this.onCopySelected}
-          onPasteSelected={this.onPasteSelected}
-          onContextMenu={this.onContextMenu}
-          readOnly={false}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div id="graph" style={{ height: "50rem" }}>
+      <GraphView
+        allowMultiSelect={true}
+        showGraphControls={true}
+        gridSize="100rem"
+        gridDotSize={1}
+        renderNodeText={false}
+        ref={refElement}
+        nodeKey={NODE_KEY}
+        nodes={graph.nodes}
+        edges={graph.edges}
+        selected={selected}
+        nodeTypes={nodeConfig.NodeTypes}
+        nodeSubtypes={nodeConfig.NodeSubtypes}
+        edgeTypes={nodeConfig.NodeTypes}
+        onSelectNode={onSelectNode}
+        onCreateNode={onCreateNode}
+        onUpdateNode={onUpdateNode}
+        onDeleteNode={onDeleteNode}
+        onSelectEdge={onSelectEdge}
+        onCreateEdge={onCreateEdge}
+        onSwapEdge={onSwapEdge}
+        onDeleteEdge={onDeleteEdge}
+        onCopySelected={onCopySelected}
+        onPasteSelected={onPasteSelected}
+        readOnly={false}
+      />
+    </div>
+  );
+};
+export default Graph;

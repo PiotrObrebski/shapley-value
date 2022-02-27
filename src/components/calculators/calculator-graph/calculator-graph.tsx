@@ -1,4 +1,4 @@
-import { Collapse, InputNumber } from "antd";
+import { Collapse } from "antd";
 import React, { useState } from "react";
 import Graph from "./graph";
 import { GraphInputSection } from "./graph-input-section";
