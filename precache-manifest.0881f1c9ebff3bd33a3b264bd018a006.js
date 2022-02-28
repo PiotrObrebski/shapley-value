@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7ee5171c5b1fd5516ce04a2b4341cc81",
+    "revision": "3057988f408c3b733cb0a879a2a0f5d5",
     "url": "/shapley-value/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/shapley-value/static/css/2.5d83b9bd.chunk.css"
   },
   {
-    "revision": "60f03473891c24fba526",
+    "revision": "edc707007219b9b25549",
     "url": "/shapley-value/static/css/main.078fe19f.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/shapley-value/static/js/2.653c9068.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "60f03473891c24fba526",
-    "url": "/shapley-value/static/js/main.a5b3d8fb.chunk.js"
+    "revision": "edc707007219b9b25549",
+    "url": "/shapley-value/static/js/main.d231e726.chunk.js"
   },
   {
     "revision": "8d2dd9df25f0b8bfc7a1",
