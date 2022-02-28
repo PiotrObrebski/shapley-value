@@ -120,6 +120,7 @@ const CalculatorCoalitionStructuresNotConnected = (
 
     window.open(encodeURI(csvContent));
   };
+
   const translateToMCNets = () => {
     const newRules: IMCNetsRule[] = [];
     let newNumberOfPlayers = 0;

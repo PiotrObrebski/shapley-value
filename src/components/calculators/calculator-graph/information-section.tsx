@@ -14,6 +14,10 @@ export const InformationSection = () => {
         <li>
           You may copy and paste selected nodes and edges with Ctrl+C and Ctrl+V
         </li>
+        <li>
+          To create self edges copy and paste a player and create an edge
+          between them.
+        </li>
         <li>Note: On Mac computers, use Cmd instead of Ctrl.</li>
       </ul>
     </div>

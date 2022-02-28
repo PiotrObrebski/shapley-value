@@ -5,9 +5,10 @@ import {
 } from "react-digraph";
 import {
   default as nodeConfig,
-  CUSTOM_EMPTY_TYPE,
+  PLAYER_TYPE,
   NODE_KEY,
-  SPECIAL_EDGE_TYPE,
+  NORMAL_EDGE,
+  SELF_EDGE,
 } from "./config";
 
 import { get } from "lodash";
@@ -17,14 +18,14 @@ const sample = {
   nodes: [
     {
       id: "1",
-      title: "1",
-      type: CUSTOM_EMPTY_TYPE,
+      title: 1,
+      type: PLAYER_TYPE,
       x: 300,
       y: 300,
     },
   ],
 };
-
+const separatorString = "-copy-of-";
 export const Graph = (props) => {
   const [graph, setGraph] = useState(sample);
   const [selected, setSelected] = useState({});
@@ -32,7 +33,7 @@ export const Graph = (props) => {
   const [players, setPlayers] = useState(sample.nodes.length);
   const [playersId, setPlayersId] = useState(sample.nodes.length);
   const refElement = useRef();
-  
+
   function getNodeIndex(searchNode) {
     return graph.nodes.findIndex((node) => {
       return node[NODE_KEY] === searchNode[NODE_KEY];
@@ -81,14 +82,13 @@ export const Graph = (props) => {
 
   // Updates the graph with a new node
   const onCreateNode = (x, y) => {
-    console.log(x, y);
     const tmpGraph = graph;
     const players = tmpGraph.nodes.map((element) => element.title);
     const newPlayerNr = firstMissingPositive(players);
     const viewNode = {
-      id: playersId + 1,
+      id: `${playersId + 1}`,
       title: newPlayerNr,
-      type: CUSTOM_EMPTY_TYPE,
+      type: PLAYER_TYPE,
       x,
       y,
     };
@@ -101,7 +101,6 @@ export const Graph = (props) => {
 
   // Deletes a node from the graph
   const onDeleteNode = (viewNode, nodeId, nodeArr) => {
-    console.log(viewNode, nodeId, nodeArr);
     const tmpGraph = graph;
     // Delete any connected edges
     const newEdges = graph.edges.filter((edge, i) => {
@@ -128,11 +127,28 @@ export const Graph = (props) => {
       source: sourceViewNode[NODE_KEY],
       target: targetViewNode[NODE_KEY],
       handleText: props.valueForEdge,
-      type: SPECIAL_EDGE_TYPE,
+      type: NORMAL_EDGE,
     };
-
+    const viewEdgeRealSource = viewEdge.source?.split(separatorString).at(-1);
+    const viewEdgeRealTarget = viewEdge.target?.split(separatorString).at(-1);
+    const isConnectionDefined = graph.edges.some((edge) => {
+      const edgeSourceRealTitle = edge?.source?.split(separatorString).at(-1);
+      const edgeTargetRealTitle = edge?.target?.split(separatorString).at(-1);
+      if (
+        viewEdgeRealSource === edgeSourceRealTitle &&
+        viewEdgeRealTarget === edgeTargetRealTitle
+      ) {
+        return true;
+      }
+      if (
+        viewEdgeRealSource === edgeTargetRealTitle &&
+        viewEdgeRealTarget === edgeSourceRealTitle
+      ) {
+        return true;
+      }
+    });
     // Only add the edge when the source node is not the same as the target
-    if (viewEdge.source !== viewEdge.target) {
+    if (viewEdge.source !== viewEdge.target && !isConnectionDefined) {
       tmpGraph.edges = [...tmpGraph.edges, viewEdge];
 
       setGraph(tmpGraph);
@@ -173,20 +189,25 @@ export const Graph = (props) => {
       return;
     }
 
-    const x = selected.x + 10;
-    const y = selected.y + 10;
+    const x = selected.x + 20;
+    const y = selected.y + 20;
     setCopied({ ...selected, x, y });
   };
 
   const onPasteSelected = () => {
-    if (copied) {
-      console.warn(
-        "No node is currently in the copy queue. Try selecting a node and copying it with Ctrl/Command-C"
-      );
+    const arrayOfCopies = graph.nodes.filter(
+      (node) => node.title === copied.title
+    );
+    if (arrayOfCopies.length >= 2) {
+      console.warn("Node already have a copy");
+      return null;
     }
 
     const tmpGraph = graph;
-    const newNode = { ...copied, id: playersId + 1 };
+    const newNode = {
+      ...copied,
+      id: `${playersId + 1}${separatorString}${copied.id}`,
+    };
 
     tmpGraph.nodes = [...tmpGraph.nodes, newNode];
     setGraph(tmpGraph);

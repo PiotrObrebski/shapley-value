@@ -15,7 +15,10 @@ export const GraphInputSection = (props: IGraphInputSectionProps) => {
         size="middle"
         className="number-of-players-input"
       >
-        <Form.Item labelAlign="right" label="Edge Value">
+        <Form.Item
+          labelAlign="right"
+          label="Before creating an edge set it's value"
+        >
           <InputNumber
             value={valueForEdge}
             onChange={(e) => setValueForEdge(e)}
