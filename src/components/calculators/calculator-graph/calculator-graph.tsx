@@ -1,23 +1,86 @@
-import { Collapse } from "antd";
 import React, { useState } from "react";
+import { Button, Collapse } from "antd";
+import { connect } from "react-redux";
+import { setGraphShapleyValues } from "../../../redux/actions";
+import { GraphGame, Store } from "../../../type";
+import {
+  calculateGraphShapleyValues,
+  generateCoalitionOfN,
+} from "../../../utilities/calculation-functions";
 import Graph from "./graph";
 import { GraphInputSection } from "./graph-input-section";
 import { InformationSection } from "./information-section";
+import DisplayGeneratedValues from "../../shared-components/display-generated-values";
 
-export const CalculatorGraph = () => {
+interface ICalculatorGraphProps extends GraphGame {
+  setGraphShapleyValues: (values: number[]) => void;
+}
+
+export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
+  const { nrOfPlayes, edges, shapleyValues, setGraphShapleyValues } = props;
   const [valueForEdge, setValueForEdge] = useState(0);
+  const [activeKeys, setActiveKeys] = useState<string[]>([]);
   return (
     <div className="calculator-graph">
-      <Collapse>
+      <Collapse
+        activeKey={activeKeys}
+        onChange={(keys) => setActiveKeys(keys as string[])}
+      >
         <Collapse.Panel header="How to use it" key="1">
           <InformationSection />
         </Collapse.Panel>
-        <GraphInputSection
-          valueForEdge={valueForEdge}
-          setValueForEdge={setValueForEdge}
-        />
+        <Collapse.Panel header="Calculated Shapley Values" key="2">
+          <DisplayGeneratedValues listShapleyValues={shapleyValues ?? []} />
+        </Collapse.Panel>
       </Collapse>
+      <GraphInputSection
+        valueForEdge={valueForEdge}
+        setValueForEdge={setValueForEdge}
+      />
+      <Button
+        type="primary"
+        disabled={!edges?.length}
+        className="generate-button"
+        onClick={() => {
+          const tmpActiveKeys = activeKeys.includes("2")
+            ? activeKeys
+            : [...activeKeys, "2"];
+          setActiveKeys(tmpActiveKeys);
+          setGraphShapleyValues(
+            calculateGraphShapleyValues(
+              generateCoalitionOfN(nrOfPlayes ?? 0),
+              edges ?? []
+            )
+          );
+        }}
+      >
+        Generate Shapley Values
+      </Button>
       <Graph valueForEdge={valueForEdge.toString()} />
     </div>
   );
 };
+const mapStateToProps = (state: { aplication: Store }): GraphGame => {
+  const { nrOfPlayes, edges, shapleyValues } = state.aplication.graph || {};
+  return {
+    nrOfPlayes,
+    edges,
+    shapleyValues,
+  };
+};
+
+const mapDispatchToProps = (
+  dispatch: (arg0: { type: string; payload: number[] }) => any
+) => {
+  return {
+    setGraphShapleyValues: (values: number[]) =>
+      dispatch(setGraphShapleyValues(values)),
+  };
+};
+
+export const CalculatorGraph = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CalculatorGraphNotConnected);
+
+export default CalculatorGraph;

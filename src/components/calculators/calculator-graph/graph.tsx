@@ -16,6 +16,8 @@ interface IGraphProps extends GraphGame {
   setGraphNodes: (nodes: INode[]) => void;
   setGraphEdges: (edges: IEdge[]) => void;
 }
+
+export const separatorString = "-copy-of-";
 export const GraphNotConnected = (props: IGraphProps) => {
   const {
     valueForEdge,
@@ -26,20 +28,19 @@ export const GraphNotConnected = (props: IGraphProps) => {
     setGraphEdges,
     setGraphNodes,
   } = props;
-  const separatorString = "-copy-of-";
   const copyString = "copied ";
   const [selected, setSelected] = useState<IEdge | INode | null>(null);
   const [copied, setCopied] = useState<IEdge | INode | null>(null);
   const [playersId, setPlayersId] = useState<number>(1);
   const refElement = useRef<Component<IGraphViewProps>>(null);
 
-  function getNodeIndex(searchNode: { [x: string]: string }): number {
+  const getNodeIndex = (searchNode: { [x: string]: string }): number => {
     return nodes
       ? nodes.findIndex((node) => {
           return node[NODE_KEY] === searchNode[NODE_KEY];
         })
       : -1;
-  }
+  };
 
   const getEdgeIndex = (searchEdge: {
     source: string | number;
@@ -136,6 +137,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
       isConnectionValid
     );
   };
+
   const onCreateEdge = (sourceViewNode: INode, targetViewNode: INode): void => {
     const viewEdge: IEdge = {
       source: sourceViewNode[NODE_KEY],
@@ -165,7 +167,6 @@ export const GraphNotConnected = (props: IGraphProps) => {
     setSelected(edge);
   };
 
-  // Called when an edge is deleted
   const onDeleteEdge = (_viewEdge: IEdge, edges: IEdge[]): void => {
     setGraphEdges(edges);
     setSelected(null);

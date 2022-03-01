@@ -1,3 +1,4 @@
+import { IEdge } from "react-digraph";
 import _ from "underscore";
 import { IMCNetsRule } from "../type";
 
@@ -79,7 +80,7 @@ export const calculateAllShapleyValues = (
   return shapleyValues;
 };
 
-export const generateCoalitionOfN = (event: number) =>
+export const generateCoalitionOfN = (event: number): number[] =>
   Array.from({ length: event }, (v, k) => k + 1);
 
 export const calculatePositivePlayersMarginalContribution = (
@@ -133,4 +134,21 @@ export const calculateMCNetsShapleyValues = (
     });
   });
   return values;
+};
+
+export const generateCoalitionsFromEdges = (edges: IEdge[]): number[][] => {
+  return edges.map((edge) => {
+    const source = parseFloat(edge.source.split("-copy-of-").at(-1) ?? "");
+    const target = parseFloat(edge.target.split("-copy-of-").at(-1) ?? "");
+    return source === target ? [source] : [source, target];
+  });
+};
+
+export const calculateGraphShapleyValues = (
+  grandCoalition: number[],
+  edges: IEdge[]
+): number[] => {
+  console.log(generateCoalitionsFromEdges(edges));
+
+  return Array(grandCoalition.length).fill(0);
 };
