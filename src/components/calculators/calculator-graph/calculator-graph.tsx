@@ -17,7 +17,7 @@ export const CalculatorGraph = () => {
           setValueForEdge={setValueForEdge}
         />
       </Collapse>
-      <Graph valueForEdge={valueForEdge} />
+      <Graph valueForEdge={valueForEdge.toString()} />
     </div>
   );
 };

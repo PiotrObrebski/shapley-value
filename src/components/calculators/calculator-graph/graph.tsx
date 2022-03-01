@@ -1,14 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { Component, useRef, useState } from "react";
 import { firstMissingPositive } from "../../../utilities/calculationg-functions";
-import {
-  GraphView, // required
-} from "react-digraph";
-import {
-  default as nodeConfig,
-  PLAYER_TYPE,
-  NODE_KEY,
-  NORMAL_EDGE,
-} from "./config";
+import { GraphView, IEdge, IGraphViewProps, INode } from "react-digraph";
+import { nodeConfig, PLAYER_TYPE, NODE_KEY, NORMAL_EDGE } from "./config";
 
 const sample = {
   edges: [],
@@ -22,23 +15,30 @@ const sample = {
     },
   ],
 };
-const separatorString = "-copy-of-";
-export const Graph = (props) => {
-  const [graph, setGraph] = useState(sample);
-  const [selected, setSelected] = useState({});
-  const [copied, setCopied] = useState({});
+interface IGraphProps {
+  valueForEdge: string;
+}
+export const Graph = (props: IGraphProps) => {
+  const separatorString = "-copy-of-";
+  const copyString = "copied ";
+  const [graph, setGraph] =
+    useState<{ nodes: INode[]; edges: IEdge[] }>(sample);
+  const [selected, setSelected] = useState<IEdge | INode | null>(null);
+  const [copied, setCopied] = useState<IEdge | INode | null>(null);
   const [players, setPlayers] = useState(sample.nodes.length);
   const [playersId, setPlayersId] = useState(sample.nodes.length);
-  const refElement = useRef();
+  const refElement = useRef<Component<IGraphViewProps>>(null);
 
-  function getNodeIndex(searchNode) {
+  function getNodeIndex(searchNode: { [x: string]: string }) {
     return graph.nodes.findIndex((node) => {
       return node[NODE_KEY] === searchNode[NODE_KEY];
     });
   }
 
-  // Helper to find the index of a given edge
-  const getEdgeIndex = (searchEdge) => {
+  const getEdgeIndex = (searchEdge: {
+    source: string | number;
+    target: string | number;
+  }) => {
     return graph.edges.findIndex((edge) => {
       return (
         edge.source === searchEdge.source && edge.target === searchEdge.target
@@ -46,13 +46,7 @@ export const Graph = (props) => {
     });
   };
 
-  /*
-   * Handlers/Interaction
-   */
-
-  // Called by 'drag' handler, etc..
-  // to sync updates from D3 with the graph
-  const onUpdateNode = (viewNode) => {
+  const onUpdateNode = (viewNode: INode) => {
     const tmpGraph = graph;
     const i = getNodeIndex(viewNode);
 
@@ -60,23 +54,21 @@ export const Graph = (props) => {
     setGraph(tmpGraph);
   };
 
-  // Node 'mouseUp' handler
-  const onSelectNode = (viewNode) => {
+  const onSelectNode = (viewNode: INode | null) => {
     setSelected(viewNode);
   };
 
-  // Edge 'mouseUp' handler
-  const onSelectEdge = (viewEdge) => {
+  const onSelectEdge = (viewEdge: IEdge) => {
     setSelected(viewEdge);
   };
 
-  // Updates the graph with a new node
-  const onCreateNode = (x, y) => {
+  const onCreateNode = (x: number, y: number) => {
     const tmpGraph = graph;
-    const players = tmpGraph.nodes.map((element) =>
-      element.title.split("copied ").at(-1)
-    );
-    const newPlayerNr = firstMissingPositive(players);
+    const playersNumbers = tmpGraph.nodes
+      .map((element) => element.title.split(copyString).at(-1))
+      .filter(String)
+      .map(Number);
+    const newPlayerNr = firstMissingPositive(playersNumbers);
     const viewNode = {
       id: `${playersId + 1}`,
       title: `${newPlayerNr}`,
@@ -84,17 +76,19 @@ export const Graph = (props) => {
       x,
       y,
     };
+    tmpGraph.nodes = [...tmpGraph.nodes, viewNode];
     setPlayers(newPlayerNr);
     setPlayersId(playersId + 1);
-    tmpGraph.nodes = [...tmpGraph.nodes, viewNode];
     setGraph(tmpGraph);
     setSelected(viewNode);
   };
 
-  // Deletes a node from the graph
-  const onDeleteNode = (viewNode, nodeId, nodeArr) => {
+  const onDeleteNode = (
+    viewNode: INode,
+    _nodeId: number | string,
+    nodeArr: INode[]
+  ) => {
     const tmpGraph = graph;
-    // Delete any connected edges
     const newEdges = graph.edges.filter((edge, i) => {
       return (
         edge.source !== viewNode[NODE_KEY] && edge.target !== viewNode[NODE_KEY]
@@ -106,16 +100,14 @@ export const Graph = (props) => {
 
     setPlayers(players - 1);
     setGraph(tmpGraph);
-    setSelected({});
+    setSelected(null);
   };
 
   // Creates a new node between two edges
-  const onCreateEdge = (sourceViewNode, targetViewNode) => {
+  const onCreateEdge = (sourceViewNode: INode, targetViewNode: INode) => {
     const tmpGraph = graph;
-    // This is just an example - any sort of logic
-    // could be used here to determine edge type
 
-    const viewEdge = {
+    const viewEdge: IEdge = {
       source: sourceViewNode[NODE_KEY],
       target: targetViewNode[NODE_KEY],
       handleText: props.valueForEdge,
@@ -157,7 +149,11 @@ export const Graph = (props) => {
   };
 
   // Called when an edge is reattached to a different target.
-  const onSwapEdge = (sourceViewNode, targetViewNode, viewEdge) => {
+  const onSwapEdge = (
+    sourceViewNode: INode,
+    targetViewNode: INode,
+    viewEdge: IEdge
+  ) => {
     const tmpGraph = graph;
     const i = getEdgeIndex(viewEdge);
     const edge = JSON.parse(JSON.stringify(graph.edges[i]));
@@ -165,7 +161,6 @@ export const Graph = (props) => {
     edge.source = sourceViewNode[NODE_KEY];
     edge.target = targetViewNode[NODE_KEY];
     tmpGraph.edges[i] = edge;
-    // reassign the array reference if you want the graph to re-render a swapped edge
     graph.edges = [...tmpGraph.edges];
 
     setGraph(tmpGraph);
@@ -173,7 +168,7 @@ export const Graph = (props) => {
   };
 
   // Called when an edge is deleted
-  const onDeleteEdge = (viewEdge, edges) => {
+  const onDeleteEdge = (_viewEdge: IEdge, edges: IEdge[]): void => {
     const tmpGraph = graph;
 
     tmpGraph.edges = edges;
@@ -182,39 +177,42 @@ export const Graph = (props) => {
     setSelected(null);
   };
 
-  const onCopySelected = () => {
-    if (selected.source) {
+  const onCopySelected = (): void => {
+    if (selected?.source) {
       console.warn("Cannot copy selected edges, try selecting a node instead.");
 
       return;
     }
-
-    const x = selected.x + 20;
-    const y = selected.y + 20;
-    setCopied({ ...selected, x, y });
+    if (selected) {
+      const x = selected.x + 20;
+      const y = selected.y + 20;
+      setCopied({ ...selected, x, y });
+    }
   };
 
   const onPasteSelected = () => {
-    const arrayOfCopies = graph.nodes.filter((node) => {
-      return (
-        node.title.split("copied ").at(-1) ===
-        copied.title.split("copied ").at(-1)
-      );
-    });
-    if (arrayOfCopies.length >= 2) {
-      console.warn("Node already have a copy");
-      return null;
-    }
+    if (copied) {
+      const arrayOfCopies = graph.nodes.filter((node) => {
+        return (
+          node.title.split(copyString).at(-1) ===
+          copied.title.split(copyString).at(-1)
+        );
+      });
+      if (arrayOfCopies.length >= 2) {
+        console.warn("Node already have a copy");
+        return null;
+      }
 
-    const tmpGraph = graph;
-    const newNode = {
-      ...copied,
-      id: `${playersId + 1}${separatorString}${copied.id}`,
-      title: `copied ${copied.title}`,
-    };
-    tmpGraph.nodes = [...tmpGraph.nodes, newNode];
-    setGraph(tmpGraph);
-    setPlayersId(playersId + 1);
+      const tmpGraph = graph;
+      const newNode = {
+        ...copied,
+        id: `${playersId + 1}${separatorString}${copied.id}`,
+        title: `${copyString}${copied.title}`,
+      };
+      tmpGraph.nodes = [...tmpGraph.nodes, newNode];
+      setGraph(tmpGraph);
+      setPlayersId(playersId + 1);
+    }
   };
 
   /* Define custom graph editing methods here */
@@ -222,11 +220,9 @@ export const Graph = (props) => {
   return (
     <div id="graph" style={{ height: "50rem" }}>
       <GraphView
-        allowMultiSelect={true}
         showGraphControls={true}
-        gridSize="100rem"
+        gridSize={100}
         gridDotSize={1}
-        renderNodeText={false}
         ref={refElement}
         nodeKey={NODE_KEY}
         nodes={graph.nodes}
