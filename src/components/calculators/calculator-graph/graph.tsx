@@ -29,7 +29,7 @@ export const Graph = (props: IGraphProps) => {
   const [playersId, setPlayersId] = useState(sample.nodes.length);
   const refElement = useRef<Component<IGraphViewProps>>(null);
 
-  function getNodeIndex(searchNode: { [x: string]: string }) {
+  function getNodeIndex(searchNode: { [x: string]: string }): number {
     return graph.nodes.findIndex((node) => {
       return node[NODE_KEY] === searchNode[NODE_KEY];
     });
@@ -38,7 +38,7 @@ export const Graph = (props: IGraphProps) => {
   const getEdgeIndex = (searchEdge: {
     source: string | number;
     target: string | number;
-  }) => {
+  }): number => {
     return graph.edges.findIndex((edge) => {
       return (
         edge.source === searchEdge.source && edge.target === searchEdge.target
@@ -46,7 +46,7 @@ export const Graph = (props: IGraphProps) => {
     });
   };
 
-  const onUpdateNode = (viewNode: INode) => {
+  const onUpdateNode = (viewNode: INode): void => {
     const tmpGraph = graph;
     const i = getNodeIndex(viewNode);
 
@@ -54,15 +54,15 @@ export const Graph = (props: IGraphProps) => {
     setGraph(tmpGraph);
   };
 
-  const onSelectNode = (viewNode: INode | null) => {
+  const onSelectNode = (viewNode: INode | null): void => {
     setSelected(viewNode);
   };
 
-  const onSelectEdge = (viewEdge: IEdge) => {
+  const onSelectEdge = (viewEdge: IEdge): void => {
     setSelected(viewEdge);
   };
 
-  const onCreateNode = (x: number, y: number) => {
+  const onCreateNode = (x: number, y: number): void => {
     const tmpGraph = graph;
     const playersNumbers = tmpGraph.nodes
       .map((element) => element.title.split(copyString).at(-1))
@@ -87,7 +87,7 @@ export const Graph = (props: IGraphProps) => {
     viewNode: INode,
     _nodeId: number | string,
     nodeArr: INode[]
-  ) => {
+  ): void => {
     const tmpGraph = graph;
     const newEdges = graph.edges.filter((edge, i) => {
       return (
@@ -103,16 +103,7 @@ export const Graph = (props: IGraphProps) => {
     setSelected(null);
   };
 
-  // Creates a new node between two edges
-  const onCreateEdge = (sourceViewNode: INode, targetViewNode: INode) => {
-    const tmpGraph = graph;
-
-    const viewEdge: IEdge = {
-      source: sourceViewNode[NODE_KEY],
-      target: targetViewNode[NODE_KEY],
-      handleText: props.valueForEdge,
-      type: NORMAL_EDGE,
-    };
+  const shouldEdgeBeCreated = (viewEdge: IEdge): boolean => {
     const viewEdgeRealSource = viewEdge.source?.split(separatorString).at(-1);
     const viewEdgeRealTarget = viewEdge.target?.split(separatorString).at(-1);
     const isConnectionDefined = graph.edges.some((edge) => {
@@ -135,25 +126,32 @@ export const Graph = (props: IGraphProps) => {
     const isSourceCopy = viewEdge.source.includes(separatorString);
     const isTargetOriginal = viewEdgeRealTarget === viewEdgeRealSource;
     const isConnectionValid = !(isSourceCopy && !isTargetOriginal);
-    // Only add the edge when the source node is not the same as the target
-    if (
+    return (
       viewEdge.source !== viewEdge.target &&
       !isConnectionDefined &&
       isConnectionValid
-    ) {
+    );
+  };
+  const onCreateEdge = (sourceViewNode: INode, targetViewNode: INode): void => {
+    const tmpGraph = graph;
+    const viewEdge: IEdge = {
+      source: sourceViewNode[NODE_KEY],
+      target: targetViewNode[NODE_KEY],
+      handleText: props.valueForEdge,
+      type: NORMAL_EDGE,
+    };
+    if (shouldEdgeBeCreated(viewEdge)) {
       tmpGraph.edges = [...tmpGraph.edges, viewEdge];
-
       setGraph(tmpGraph);
       setSelected(viewEdge);
     }
   };
 
-  // Called when an edge is reattached to a different target.
   const onSwapEdge = (
     sourceViewNode: INode,
     targetViewNode: INode,
     viewEdge: IEdge
-  ) => {
+  ): void => {
     const tmpGraph = graph;
     const i = getEdgeIndex(viewEdge);
     const edge = JSON.parse(JSON.stringify(graph.edges[i]));
@@ -190,7 +188,7 @@ export const Graph = (props: IGraphProps) => {
     }
   };
 
-  const onPasteSelected = () => {
+  const onPasteSelected = (): void | null => {
     if (copied) {
       const arrayOfCopies = graph.nodes.filter((node) => {
         return (
@@ -214,8 +212,6 @@ export const Graph = (props: IGraphProps) => {
       setPlayersId(playersId + 1);
     }
   };
-
-  /* Define custom graph editing methods here */
 
   return (
     <div id="graph" style={{ height: "50rem" }}>
@@ -246,4 +242,5 @@ export const Graph = (props: IGraphProps) => {
     </div>
   );
 };
+
 export default Graph;
