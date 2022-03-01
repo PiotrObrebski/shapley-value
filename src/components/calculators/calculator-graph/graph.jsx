@@ -8,17 +8,14 @@ import {
   PLAYER_TYPE,
   NODE_KEY,
   NORMAL_EDGE,
-  SELF_EDGE,
 } from "./config";
-
-import { get } from "lodash";
 
 const sample = {
   edges: [],
   nodes: [
     {
       id: "1",
-      title: 1,
+      title: "1",
       type: PLAYER_TYPE,
       x: 300,
       y: 300,
@@ -64,14 +61,7 @@ export const Graph = (props) => {
   };
 
   // Node 'mouseUp' handler
-  const onSelectNode = (viewNode, event) => {
-    // const { id = "" } = event.target;
-    const id = get(event, "target.id", "");
-    if (id.includes("text")) {
-      document.getElementById(event.target.id).click();
-    }
-
-    // Deselect events will send Null viewNode
+  const onSelectNode = (viewNode) => {
     setSelected(viewNode);
   };
 
@@ -83,11 +73,13 @@ export const Graph = (props) => {
   // Updates the graph with a new node
   const onCreateNode = (x, y) => {
     const tmpGraph = graph;
-    const players = tmpGraph.nodes.map((element) => element.title);
+    const players = tmpGraph.nodes.map((element) =>
+      element.title.split("copied ").at(-1)
+    );
     const newPlayerNr = firstMissingPositive(players);
     const viewNode = {
       id: `${playersId + 1}`,
-      title: newPlayerNr,
+      title: `${newPlayerNr}`,
       type: PLAYER_TYPE,
       x,
       y,
@@ -146,9 +138,17 @@ export const Graph = (props) => {
       ) {
         return true;
       }
+      return false;
     });
+    const isSourceCopy = viewEdge.source.includes(separatorString);
+    const isTargetOriginal = viewEdgeRealTarget === viewEdgeRealSource;
+    const isConnectionValid = !(isSourceCopy && !isTargetOriginal);
     // Only add the edge when the source node is not the same as the target
-    if (viewEdge.source !== viewEdge.target && !isConnectionDefined) {
+    if (
+      viewEdge.source !== viewEdge.target &&
+      !isConnectionDefined &&
+      isConnectionValid
+    ) {
       tmpGraph.edges = [...tmpGraph.edges, viewEdge];
 
       setGraph(tmpGraph);
@@ -195,9 +195,12 @@ export const Graph = (props) => {
   };
 
   const onPasteSelected = () => {
-    const arrayOfCopies = graph.nodes.filter(
-      (node) => node.title === copied.title
-    );
+    const arrayOfCopies = graph.nodes.filter((node) => {
+      return (
+        node.title.split("copied ").at(-1) ===
+        copied.title.split("copied ").at(-1)
+      );
+    });
     if (arrayOfCopies.length >= 2) {
       console.warn("Node already have a copy");
       return null;
@@ -207,8 +210,8 @@ export const Graph = (props) => {
     const newNode = {
       ...copied,
       id: `${playersId + 1}${separatorString}${copied.id}`,
+      title: `copied ${copied.title}`,
     };
-
     tmpGraph.nodes = [...tmpGraph.nodes, newNode];
     setGraph(tmpGraph);
     setPlayersId(playersId + 1);

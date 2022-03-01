@@ -23,13 +23,12 @@ export const NODE_KEY = "id"; // Key used to identify nodes
 // However, GraphView renders text differently for empty types
 // so this has to be passed in if that behavior is desired.
 export const PLAYER_TYPE = "player";
-export const SELF_EDGE = "selfEdge";
 export const NORMAL_EDGE = "normalEdge";
 
 export const nodeTypes = [
   PLAYER_TYPE,
 ];
-export const edgeTypes = [SELF_EDGE, NORMAL_EDGE];
+export const edgeTypes = [ NORMAL_EDGE];
 
 const playerShape = (
   <symbol viewBox="0 0 200 200" id="player">
@@ -42,31 +41,21 @@ const playerShape = (
   </symbol>
 );
 
-const selfEdge = (
-  <symbol viewBox="0 0 50 50" id="emptyEdge">
-    <circle cx="25" cy="25" r="8" fill="currentColor" />
-  </symbol>
-);
-
 const normalEdgeShape = (
   <symbol viewBox="0 0 50 50" id="normalEdge">
-    {/* <rect
+    <rect
       transform="rotate(45)"
       x="27.5"
       y="-7.5"
       width="15"
       height="15"
       fill="currentColor"
-    /> */}
+    />
   </symbol>
 );
 
 export default {
   EdgeTypes: {
-    selfEdge: {
-      shape: selfEdge,
-      shapeId: "#selfEdge",
-    },
     normalEdge: {
       shape: normalEdgeShape,
       shapeId: "#normalEdge"
