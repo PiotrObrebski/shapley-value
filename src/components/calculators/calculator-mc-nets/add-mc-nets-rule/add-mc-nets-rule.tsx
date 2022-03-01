@@ -1,16 +1,19 @@
-import React from 'react'
-import { PlusOutlined } from "@ant-design/icons"
-import { Button, Col, Row } from "antd"
-import { connect } from "react-redux"
-import { setMCNetsRules } from "../../../../redux/actions"
+import React from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Col, Row } from "antd";
+import { connect } from "react-redux";
+import { setMCNetsRules } from "../../../../redux/actions";
+import { IMCNetsRule, McNetsGame, Store } from "../../../../type";
 
 export interface IAddMCNetsRuleProps {
-  rules?: IMCNetsRule[]
-  setMCNetsRules: (rules: IMCNetsRule[]) => void
+  rules?: IMCNetsRule[];
+  setMCNetsRules: (rules: IMCNetsRule[]) => void;
 }
 
-export const AddMCNetsRuleNotConnected = (props: IAddMCNetsRuleProps): JSX.Element => {
-  const { rules, setMCNetsRules } = props
+export const AddMCNetsRuleNotConnected = (
+  props: IAddMCNetsRuleProps
+): JSX.Element => {
+  const { rules, setMCNetsRules } = props;
 
   return (
     <div className="add-mc-nets-rule">
@@ -27,33 +30,30 @@ export const AddMCNetsRuleNotConnected = (props: IAddMCNetsRuleProps): JSX.Eleme
                 {
                   positivePlayers: [],
                   negativePlayers: [],
-                  value: 0
-                }])
+                  value: 0,
+                },
+              ])
             }
           />
         </Col>
       </Row>
     </div>
-  )
-}
+  );
+};
 
 const mapStateToProps = (state: { aplication: Store }): McNetsGame => {
   return {
-    rules: state.aplication.mcNets?.rules
+    rules: state.aplication.mcNets?.rules,
   };
 };
 
 const mapDispatchToProps = (
-  dispatch: (arg0: {
-    type: string;
-    payload: IMCNetsRule[];
-  }) => any
+  dispatch: (arg0: { type: string; payload: IMCNetsRule[] }) => any
 ): {
-  setMCNetsRules: (rules: IMCNetsRule[]) => void
+  setMCNetsRules: (rules: IMCNetsRule[]) => void;
 } => {
   return {
-    setMCNetsRules: (rules: IMCNetsRule[]) =>
-      dispatch(setMCNetsRules(rules))
+    setMCNetsRules: (rules: IMCNetsRule[]) => dispatch(setMCNetsRules(rules)),
   };
 };
 
@@ -62,4 +62,4 @@ export const AddMCNetsRule = connect(
   mapDispatchToProps
 )(AddMCNetsRuleNotConnected);
 
-export default AddMCNetsRule
+export default AddMCNetsRule;

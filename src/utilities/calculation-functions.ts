@@ -1,4 +1,5 @@
 import _ from "underscore";
+import { IMCNetsRule } from "../type";
 
 export const indexOfArrayInArray = (
   arrayOfArrays: number[][],
@@ -42,7 +43,7 @@ export const coalitionsGenerateShapleyValue = (
       coalitionWithoutPlayer.splice(coalition.indexOf(player), 1);
       const valueOfCoalitionWithoutPlayer =
         funcOfCoalitions[
-        indexOfArrayInArray(coalitions, coalitionWithoutPlayer)
+          indexOfArrayInArray(coalitions, coalitionWithoutPlayer)
         ] ?? 0;
       const numberOfPermutationsC = factorial(coalitionWithoutPlayer.length);
       const numberOfPermutationsA = factorial(

@@ -11,6 +11,7 @@ import {
   setMCNetsShapleyValues,
 } from "../../../redux/actions";
 import { connect } from "react-redux";
+import { Store, McNetsGame, IMCNetsRule } from "../../../type";
 
 interface ICalculatorMCNetsProps extends McNetsGame {
   setMCNetsNumberOfPlayers: (nrOfPlayes: number) => void;

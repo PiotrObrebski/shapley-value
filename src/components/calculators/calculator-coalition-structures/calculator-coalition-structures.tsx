@@ -20,6 +20,7 @@ import {
   setMCNetsRules,
 } from "../../../redux/actions";
 import { TabsKeys } from "../../layout/body/app-body/app-body";
+import { CoalitionsGame, IMCNetsRule, Store } from "../../../type";
 
 interface ICalculatorCoalitionStructuresProps extends CoalitionsGame {
   setActiveTabKey: React.Dispatch<React.SetStateAction<TabsKeys>>;

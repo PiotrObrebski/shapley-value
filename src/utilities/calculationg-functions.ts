@@ -1,4 +1,5 @@
 import _ from "underscore";
+import { IMCNetsRule } from "../type";
 
 export const indexOfArrayInArray = (
   arrayOfArrays: number[][],

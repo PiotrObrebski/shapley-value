@@ -2,56 +2,64 @@ import React, { Component, useRef, useState } from "react";
 import { firstMissingPositive } from "../../../utilities/calculationg-functions";
 import { GraphView, IEdge, IGraphViewProps, INode } from "react-digraph";
 import { nodeConfig, PLAYER_TYPE, NODE_KEY, NORMAL_EDGE } from "./config";
+import {
+  setGraphNumberOfPlayers,
+  setGraphNodes,
+  setGraphEdges,
+} from "../../../redux/actions";
+import { GraphGame, Store } from "../../../type";
+import { connect } from "react-redux";
 
-const sample = {
-  edges: [],
-  nodes: [
-    {
-      id: "1",
-      title: "1",
-      type: PLAYER_TYPE,
-      x: 300,
-      y: 300,
-    },
-  ],
-};
-interface IGraphProps {
+interface IGraphProps extends GraphGame {
   valueForEdge: string;
+  setGraphNumberOfPlayers: (nrOfPlayes: number) => void;
+  setGraphNodes: (nodes: INode[]) => void;
+  setGraphEdges: (edges: IEdge[]) => void;
 }
-export const Graph = (props: IGraphProps) => {
+export const GraphNotConnected = (props: IGraphProps) => {
+  const {
+    valueForEdge,
+    nrOfPlayes,
+    edges,
+    nodes,
+    setGraphNumberOfPlayers,
+    setGraphEdges,
+    setGraphNodes,
+  } = props;
   const separatorString = "-copy-of-";
   const copyString = "copied ";
-  const [graph, setGraph] =
-    useState<{ nodes: INode[]; edges: IEdge[] }>(sample);
   const [selected, setSelected] = useState<IEdge | INode | null>(null);
   const [copied, setCopied] = useState<IEdge | INode | null>(null);
-  const [players, setPlayers] = useState(sample.nodes.length);
-  const [playersId, setPlayersId] = useState(sample.nodes.length);
+  const [playersId, setPlayersId] = useState<number>(1);
   const refElement = useRef<Component<IGraphViewProps>>(null);
 
   function getNodeIndex(searchNode: { [x: string]: string }): number {
-    return graph.nodes.findIndex((node) => {
-      return node[NODE_KEY] === searchNode[NODE_KEY];
-    });
+    return nodes
+      ? nodes.findIndex((node) => {
+          return node[NODE_KEY] === searchNode[NODE_KEY];
+        })
+      : -1;
   }
 
   const getEdgeIndex = (searchEdge: {
     source: string | number;
     target: string | number;
   }): number => {
-    return graph.edges.findIndex((edge) => {
-      return (
-        edge.source === searchEdge.source && edge.target === searchEdge.target
-      );
-    });
+    return edges
+      ? edges.findIndex((edge) => {
+          return (
+            edge.source === searchEdge.source &&
+            edge.target === searchEdge.target
+          );
+        })
+      : -1;
   };
 
   const onUpdateNode = (viewNode: INode): void => {
-    const tmpGraph = graph;
+    const tmpNodes = nodes ?? [];
     const i = getNodeIndex(viewNode);
-
-    tmpGraph.nodes[i] = viewNode;
-    setGraph(tmpGraph);
+    tmpNodes[i] = viewNode;
+    setGraphNodes(tmpNodes ?? []);
   };
 
   const onSelectNode = (viewNode: INode | null): void => {
@@ -63,8 +71,8 @@ export const Graph = (props: IGraphProps) => {
   };
 
   const onCreateNode = (x: number, y: number): void => {
-    const tmpGraph = graph;
-    const playersNumbers = tmpGraph.nodes
+    const tmpNodes = nodes ?? [];
+    const playersNumbers = tmpNodes
       .map((element) => element.title.split(copyString).at(-1))
       .filter(String)
       .map(Number);
@@ -76,10 +84,10 @@ export const Graph = (props: IGraphProps) => {
       x,
       y,
     };
-    tmpGraph.nodes = [...tmpGraph.nodes, viewNode];
-    setPlayers(newPlayerNr);
+    tmpNodes.push(viewNode);
+    setGraphNumberOfPlayers(newPlayerNr);
     setPlayersId(playersId + 1);
-    setGraph(tmpGraph);
+    setGraphNodes(tmpNodes);
     setSelected(viewNode);
   };
 
@@ -88,25 +96,21 @@ export const Graph = (props: IGraphProps) => {
     _nodeId: number | string,
     nodeArr: INode[]
   ): void => {
-    const tmpGraph = graph;
-    const newEdges = graph.edges.filter((edge, i) => {
+    const newEdges = edges?.filter((edge, i) => {
       return (
         edge.source !== viewNode[NODE_KEY] && edge.target !== viewNode[NODE_KEY]
       );
     });
-
-    tmpGraph.nodes = nodeArr;
-    tmpGraph.edges = newEdges;
-
-    setPlayers(players - 1);
-    setGraph(tmpGraph);
+    setGraphNumberOfPlayers(nrOfPlayes ? nrOfPlayes - 1 : 0);
+    setGraphNodes(nodeArr);
+    setGraphEdges(newEdges ?? []);
     setSelected(null);
   };
 
   const shouldEdgeBeCreated = (viewEdge: IEdge): boolean => {
     const viewEdgeRealSource = viewEdge.source?.split(separatorString).at(-1);
     const viewEdgeRealTarget = viewEdge.target?.split(separatorString).at(-1);
-    const isConnectionDefined = graph.edges.some((edge) => {
+    const isConnectionDefined = edges?.some((edge) => {
       const edgeSourceRealTitle = edge?.source?.split(separatorString).at(-1);
       const edgeTargetRealTitle = edge?.target?.split(separatorString).at(-1);
       if (
@@ -133,16 +137,14 @@ export const Graph = (props: IGraphProps) => {
     );
   };
   const onCreateEdge = (sourceViewNode: INode, targetViewNode: INode): void => {
-    const tmpGraph = graph;
     const viewEdge: IEdge = {
       source: sourceViewNode[NODE_KEY],
       target: targetViewNode[NODE_KEY],
-      handleText: props.valueForEdge,
+      handleText: valueForEdge,
       type: NORMAL_EDGE,
     };
     if (shouldEdgeBeCreated(viewEdge)) {
-      tmpGraph.edges = [...tmpGraph.edges, viewEdge];
-      setGraph(tmpGraph);
+      setGraphEdges([...(edges ?? []), viewEdge]);
       setSelected(viewEdge);
     }
   };
@@ -152,33 +154,26 @@ export const Graph = (props: IGraphProps) => {
     targetViewNode: INode,
     viewEdge: IEdge
   ): void => {
-    const tmpGraph = graph;
+    const tmpEdges = edges ?? [];
     const i = getEdgeIndex(viewEdge);
-    const edge = JSON.parse(JSON.stringify(graph.edges[i]));
+    const edge = JSON.parse(JSON.stringify(tmpEdges[i]));
 
     edge.source = sourceViewNode[NODE_KEY];
     edge.target = targetViewNode[NODE_KEY];
-    tmpGraph.edges[i] = edge;
-    graph.edges = [...tmpGraph.edges];
-
-    setGraph(tmpGraph);
+    tmpEdges[i] = edge;
+    setGraphEdges([...tmpEdges]);
     setSelected(edge);
   };
 
   // Called when an edge is deleted
   const onDeleteEdge = (_viewEdge: IEdge, edges: IEdge[]): void => {
-    const tmpGraph = graph;
-
-    tmpGraph.edges = edges;
-
-    setGraph(tmpGraph);
+    setGraphEdges(edges);
     setSelected(null);
   };
 
   const onCopySelected = (): void => {
     if (selected?.source) {
       console.warn("Cannot copy selected edges, try selecting a node instead.");
-
       return;
     }
     if (selected) {
@@ -190,25 +185,25 @@ export const Graph = (props: IGraphProps) => {
 
   const onPasteSelected = (): void | null => {
     if (copied) {
-      const arrayOfCopies = graph.nodes.filter((node) => {
+      const arrayOfCopies = nodes?.filter((node) => {
         return (
           node.title.split(copyString).at(-1) ===
           copied.title.split(copyString).at(-1)
         );
       });
-      if (arrayOfCopies.length >= 2) {
+
+      if (arrayOfCopies && arrayOfCopies.length >= 2) {
         console.warn("Node already have a copy");
         return null;
       }
 
-      const tmpGraph = graph;
+      const tmpNodes = nodes;
       const newNode = {
         ...copied,
         id: `${playersId + 1}${separatorString}${copied.id}`,
         title: `${copyString}${copied.title}`,
       };
-      tmpGraph.nodes = [...tmpGraph.nodes, newNode];
-      setGraph(tmpGraph);
+      setGraphNodes([...(tmpNodes ?? []), newNode]);
       setPlayersId(playersId + 1);
     }
   };
@@ -217,12 +212,12 @@ export const Graph = (props: IGraphProps) => {
     <div id="graph" style={{ height: "50rem" }}>
       <GraphView
         showGraphControls={true}
-        gridSize={100}
+        gridSize="100rem"
         gridDotSize={1}
         ref={refElement}
         nodeKey={NODE_KEY}
-        nodes={graph.nodes}
-        edges={graph.edges}
+        nodes={nodes ?? []}
+        edges={edges ?? []}
         selected={selected}
         nodeTypes={nodeConfig.NodeTypes}
         nodeSubtypes={nodeConfig.NodeSubtypes}
@@ -242,5 +237,29 @@ export const Graph = (props: IGraphProps) => {
     </div>
   );
 };
+
+const mapStateToProps = (state: { aplication: Store }): GraphGame => {
+  const { nrOfPlayes, edges, nodes } = state.aplication.graph || {};
+  return {
+    nrOfPlayes,
+    edges,
+    nodes,
+  };
+};
+const mapDispatchToProps = (
+  dispatch: (arg0: { type: string; payload: number | IEdge[] | INode[] }) => any
+) => {
+  return {
+    setGraphNumberOfPlayers: (nrOfPlayes: number) =>
+      dispatch(setGraphNumberOfPlayers(nrOfPlayes)),
+    setGraphEdges: (edges: IEdge[]) => dispatch(setGraphEdges(edges)),
+    setGraphNodes: (nodes: INode[]) => dispatch(setGraphNodes(nodes)),
+  };
+};
+
+export const Graph = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(GraphNotConnected);
 
 export default Graph;

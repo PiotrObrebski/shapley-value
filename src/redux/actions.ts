@@ -1,3 +1,5 @@
+import { IEdge, INode } from "react-digraph";
+import { IMCNetsRule } from "../type";
 import ActionTypes from "./actionTypes";
 
 export const setCoalitionsNumberOfplayers = (
@@ -70,4 +72,44 @@ export const setMCNetsShapleyValues = (
 } => ({
   type: ActionTypes.SET_MCNETS_SHAPLEY_VALUES,
   payload: shapleyValues,
+});
+
+export const setGraphNumberOfPlayers = (
+  nrOfPlayes: number
+): {
+  type: string;
+  payload: number;
+} => ({
+  type: ActionTypes.SET_GRAPH_NUMBER_OF_PLAYERS,
+  payload: nrOfPlayes,
+});
+
+export const setGraphNodes = (
+  nodes: INode[]
+): {
+  type: string;
+  payload: INode[];
+} => ({
+  type: ActionTypes.SET_GRAPH_NODES,
+  payload: nodes,
+});
+
+export const setGraphEdges = (
+  edges: IEdge[]
+): {
+  type: string;
+  payload: IEdge[];
+} => ({
+  type: ActionTypes.SET_GRAPH_EDGES,
+  payload: edges,
+});
+
+export const setGraphShapleyValues = (
+  values: number[]
+): {
+  type: string;
+  payload: number[];
+} => ({
+  type: ActionTypes.SET_GRAPH_SHAPLEY_VALUES,
+  payload: values,
 });

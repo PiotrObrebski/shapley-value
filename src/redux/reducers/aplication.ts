@@ -1,6 +1,20 @@
+import { PLAYER_TYPE } from "../../components/calculators/calculator-graph/config";
+import { Store } from "../../type";
 import ActionTypes from "../actionTypes";
 
-const initialState: Store = {};
+const initialState: Store = {
+  graph: {
+    nodes: [
+      {
+        id: "1",
+        title: "1",
+        type: PLAYER_TYPE,
+        x: 300,
+        y: 300,
+      },
+    ],
+  },
+};
 
 export const aplication = (
   state = initialState,
@@ -56,10 +70,35 @@ export const aplication = (
         },
       };
     case ActionTypes.SET_MCNETS_SHAPLEY_VALUES:
+    case ActionTypes.SET_GRAPH_NUMBER_OF_PLAYERS:
       return {
         ...state,
-        mcNets: {
-          ...state.mcNets,
+        graph: {
+          ...state.graph,
+          nrOfPlayes: action.payload,
+        },
+      };
+    case ActionTypes.SET_GRAPH_EDGES:
+      return {
+        ...state,
+        graph: {
+          ...state.graph,
+          edges: action.payload,
+        },
+      };
+    case ActionTypes.SET_GRAPH_NODES:
+      return {
+        ...state,
+        graph: {
+          ...state.graph,
+          nodes: action.payload,
+        },
+      };
+    case ActionTypes.SET_GRAPH_SHAPLEY_VALUES:
+      return {
+        ...state,
+        graph: {
+          ...state.graph,
           shapleyValues: action.payload,
         },
       };

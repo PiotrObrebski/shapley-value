@@ -6,6 +6,7 @@ import { setMCNetsRules } from "../../../../redux/actions";
 import { generateCoalitionOfN } from "../../../../utilities/calculation-functions";
 import "./mc-nets-rule.css";
 import { PlayersGroup } from "./player-group/players-group";
+import { Store, IMCNetsRule, McNetsGame } from "../../../../type";
 export interface IMCNetsRuleProps {
   index: number;
   nrOfPlayes?: number;

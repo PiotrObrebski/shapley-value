@@ -1,3 +1,5 @@
+import { INode, IEdge } from "react-digraph";
+
 interface Store {
   coalitions?: CoalitionsGame;
   mcNets?: McNetsGame;
@@ -11,16 +13,19 @@ interface CoalitionsGame {
 }
 interface McNetsGame {
   nrOfPlayes?: number;
-  rules?: IMCNetsRule[]
+  rules?: IMCNetsRule[];
   shapleyValues?: number[];
 }
 
 interface IMCNetsRule {
-  positivePlayers: string[]
-  negativePlayers: string[]
-  value: number
+  positivePlayers: string[];
+  negativePlayers: string[];
+  value: number;
 }
 interface GraphGame {
   nrOfPlayes?: number;
+  edges?: IEdge[];
+  nodes?: INode[];
+  shapleyValues?: number[];
 }
 type INumberOfPlayers = 3 | 4 | 5 | 6 | 7;

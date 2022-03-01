@@ -1,8 +1,9 @@
-import React from 'react'
+import React from "react";
 import { Table, InputNumber } from "antd";
 import Column from "antd/lib/table/Column";
 import { connect } from "react-redux";
 import { setCoalitionsFunctionOfCoalitions } from "../../../redux/actions";
+import { Store } from "../../../type";
 
 export interface ICoalitionStructuresInputProps {
   coalitions?: number[][];
@@ -26,10 +27,10 @@ export const CoalitionStructuresInputNotConnected = (
 
   const columns = [
     {
-      title: 'Coalition',
-      dataIndex: 'coalition',
-      key: 'coalition',
-      align: 'right' as 'left' | 'right' | 'center',
+      title: "Coalition",
+      dataIndex: "coalition",
+      key: "coalition",
+      align: "right" as "left" | "right" | "center",
     },
     {
       title: "Value",

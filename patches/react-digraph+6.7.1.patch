@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-digraph/typings/index.d.ts b/node_modules/react-digraph/typings/index.d.ts
+index e29bd9c..6a02005 100644
+--- a/node_modules/react-digraph/typings/index.d.ts
++++ b/node_modules/react-digraph/typings/index.d.ts
+@@ -103,7 +103,7 @@ declare module 'react-digraph' {
+     edgeHandleSize?: number;
+     edgeTypes: any;
+     gridDotSize?: number;
+-    gridSize?: number;
++    gridSize?: number | string;
+     gridSpacing?: number;
+     layoutEngineType?: LayoutEngineType;
+     maxTitleChars?: number;
