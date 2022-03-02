@@ -29,3 +29,9 @@ interface GraphGame {
   shapleyValues?: number[];
 }
 type INumberOfPlayers = 3 | 4 | 5 | 6 | 7;
+
+declare global {
+  interface String extends String {
+    elementAfterSplit: (separator: string) => string | undefined;
+  }
+}

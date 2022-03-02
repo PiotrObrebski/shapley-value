@@ -16,7 +16,11 @@ interface IGraphProps extends GraphGame {
   setGraphNodes: (nodes: INode[]) => void;
   setGraphEdges: (edges: IEdge[]) => void;
 }
-
+String.prototype.elementAfterSplit = function (
+  separator: string
+): string | undefined {
+  return this.split(separator).at(-1);
+};
 export const separatorString = "-copy-of-";
 export const GraphNotConnected = (props: IGraphProps) => {
   const {
@@ -74,7 +78,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
   const onCreateNode = (x: number, y: number): void => {
     const tmpNodes = nodes ?? [];
     const playersNumbers = tmpNodes
-      .map((element) => element.title.split(copyString).at(-1))
+      .map((element) => element.title.elementAfterSplit(copyString))
       .filter(String)
       .map(Number);
     const newPlayerNr = firstMissingPositive(playersNumbers);
@@ -109,11 +113,15 @@ export const GraphNotConnected = (props: IGraphProps) => {
   };
 
   const shouldEdgeBeCreated = (viewEdge: IEdge): boolean => {
-    const viewEdgeRealSource = viewEdge.source?.split(separatorString).at(-1);
-    const viewEdgeRealTarget = viewEdge.target?.split(separatorString).at(-1);
+    const viewEdgeRealSource =
+      viewEdge.source?.elementAfterSplit(separatorString);
+    const viewEdgeRealTarget =
+      viewEdge.target?.elementAfterSplit(separatorString);
     const isConnectionDefined = edges?.some((edge) => {
-      const edgeSourceRealTitle = edge?.source?.split(separatorString).at(-1);
-      const edgeTargetRealTitle = edge?.target?.split(separatorString).at(-1);
+      const edgeSourceRealTitle =
+        edge?.source?.elementAfterSplit(separatorString);
+      const edgeTargetRealTitle =
+        edge?.target?.elementAfterSplit(separatorString);
       if (
         viewEdgeRealSource === edgeSourceRealTitle &&
         viewEdgeRealTarget === edgeTargetRealTitle
@@ -129,12 +137,14 @@ export const GraphNotConnected = (props: IGraphProps) => {
       return false;
     });
     const isSourceCopy = viewEdge.source.includes(separatorString);
+    const isTargetCopy = viewEdge.target.includes(separatorString);
     const isTargetOriginal = viewEdgeRealTarget === viewEdgeRealSource;
     const isConnectionValid = !(isSourceCopy && !isTargetOriginal);
     return (
       viewEdge.source !== viewEdge.target &&
       !isConnectionDefined &&
-      isConnectionValid
+      isConnectionValid &&
+      !isTargetCopy
     );
   };
 
@@ -188,8 +198,8 @@ export const GraphNotConnected = (props: IGraphProps) => {
     if (copied) {
       const arrayOfCopies = nodes?.filter((node) => {
         return (
-          node.title.split(copyString).at(-1) ===
-          copied.title.split(copyString).at(-1)
+          node.title.elementAfterSplit(copyString) ===
+          copied.title.elementAfterSplit(copyString)
         );
       });
 
@@ -210,7 +220,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
   };
 
   return (
-    <div id="graph" style={{ height: "50rem" }}>
+    <div className="graph-container">
       <GraphView
         showGraphControls={true}
         gridSize="100rem"

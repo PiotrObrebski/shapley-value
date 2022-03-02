@@ -1,0 +1,44 @@
+.calculator-graph {
+  .generate-panel .ant-collapse-header {
+    display: none;
+  }
+  .generate-panel .ant-collapse-content {
+    border: none;
+  }
+  .graph-container {
+    height: 500px;
+    .view-wrapper {
+      position: relative;
+      .graph-controls-wrapper {
+        .graph-controls {
+          bottom: 15px;
+          .slider-wrapper {
+            padding: 0 4px;
+            line-height: 30px;
+            display: inline-block;
+            span {
+              margin-top: 2px;
+            }
+            .slider {
+              margin: 10px 2px 0;
+            }
+          }
+          .slider-button {
+            svg {
+              margin-top: 4px;
+            }
+          }
+        }
+      }
+      .graph {
+        .view {
+          .entities {
+            .edge {
+              marker-end: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}

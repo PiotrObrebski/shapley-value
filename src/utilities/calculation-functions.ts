@@ -136,11 +136,17 @@ export const calculateMCNetsShapleyValues = (
   return values;
 };
 
-export const generateCoalitionsFromEdges = (edges: IEdge[]): number[][] => {
+export const generateCoalitionsFromEdges = (
+  edges: IEdge[]
+): Array<{ value: number; coalition: number[] }> => {
   return edges.map((edge) => {
     const source = parseFloat(edge.source.split("-copy-of-").at(-1) ?? "");
     const target = parseFloat(edge.target.split("-copy-of-").at(-1) ?? "");
-    return source === target ? [source] : [source, target];
+    const value = parseFloat(edge.handleText ?? "");
+    return {
+      value,
+      coalition: source === target ? [source] : [source, target],
+    };
   });
 };
 
@@ -148,7 +154,14 @@ export const calculateGraphShapleyValues = (
   grandCoalition: number[],
   edges: IEdge[]
 ): number[] => {
-  console.log(generateCoalitionsFromEdges(edges));
-
-  return Array(grandCoalition.length).fill(0);
+  const edgesStructure = generateCoalitionsFromEdges(edges);
+  return grandCoalition.map((player) => {
+    let value = 0;
+    edgesStructure.forEach((edge) => {
+      value += edge.coalition.includes(player)
+        ? edge.value / (edge.coalition.length === 2 ? 2 : 1)
+        : 0;
+    });
+    return value;
+  });
 };
