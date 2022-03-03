@@ -22,7 +22,7 @@ export const AppBody = (): JSX.Element => {
         <CalculatorFunctionDefinition />
       </TabPane>
       <TabPane tab="MC-nets game representation" key="mc-nets">
-        <CalculatorMCNets />
+        <CalculatorMCNets setActiveTabKey={setActiveTabKey} />
       </TabPane>
       <TabPane tab="Graph game representation" key="graph">
         <CalculatorGraph setActiveTabKey={setActiveTabKey} />

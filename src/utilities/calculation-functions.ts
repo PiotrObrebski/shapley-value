@@ -125,7 +125,6 @@ export const calculateMCNetsShapleyValues = (
         numberOfNegativePlayers,
         rule.value
       );
-    console.log(positivePlayersContribution, negativePlayersContribution);
 
     rule.positivePlayers.forEach((player) => {
       values[parseFloat(player) - 1] += positivePlayersContribution;
@@ -211,3 +210,12 @@ export const generateFunctionOfCoalitionsFromEdges = (
     });
     return value;
   });
+export const generateFunctionOfCoalitionsFromMCNets = (
+  reles: IMCNetsRule[],
+  nrOfCoalitions: number
+): number[] => {
+  const functionOfCoalitions = Array(nrOfCoalitions).fill(0);
+  console.log(functionOfCoalitions);
+
+  return functionOfCoalitions;
+};
