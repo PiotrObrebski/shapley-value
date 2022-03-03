@@ -165,3 +165,15 @@ export const calculateGraphShapleyValues = (
     return value;
   });
 };
+export const generateMCNetsRulesFromEdges = (edges: IEdge[]): IMCNetsRule[] => {
+  return edges.map((edge) => {
+    const source = edge.source.split("-copy-of-").at(-1) ?? "";
+    const target = edge.target.split("-copy-of-").at(-1) ?? "";
+    const value = parseFloat(edge.handleText ?? "");
+    return {
+      value,
+      positivePlayers: source === target ? [source] : [source, target],
+      negativePlayers: [],
+    };
+  });
+};

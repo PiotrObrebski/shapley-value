@@ -25,7 +25,7 @@ export const AppBody = (): JSX.Element => {
         <CalculatorMCNets />
       </TabPane>
       <TabPane tab="Graph game representation" key="graph">
-        <CalculatorGraph />
+        <CalculatorGraph setActiveTabKey={setActiveTabKey} />
       </TabPane>
     </Tabs>
   );

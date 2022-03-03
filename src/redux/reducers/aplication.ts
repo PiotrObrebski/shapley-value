@@ -70,6 +70,13 @@ export const aplication = (
         },
       };
     case ActionTypes.SET_MCNETS_SHAPLEY_VALUES:
+      return {
+        ...state,
+        mcNets: {
+          ...state.mcNets,
+          shapleyValues: action.payload,
+        },
+      };
     case ActionTypes.SET_GRAPH_NUMBER_OF_PLAYERS:
       return {
         ...state,

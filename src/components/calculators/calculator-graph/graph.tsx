@@ -9,9 +9,9 @@ import {
 } from "../../../redux/actions";
 import { GraphGame, Store } from "../../../type";
 import { connect } from "react-redux";
+import { GraphInputSection } from "./graph-input-section";
 
 interface IGraphProps extends GraphGame {
-  valueForEdge: string;
   setGraphNumberOfPlayers: (nrOfPlayes: number) => void;
   setGraphNodes: (nodes: INode[]) => void;
   setGraphEdges: (edges: IEdge[]) => void;
@@ -24,7 +24,6 @@ String.prototype.elementAfterSplit = function (
 export const separatorString = "-copy-of-";
 export const GraphNotConnected = (props: IGraphProps) => {
   const {
-    valueForEdge,
     nrOfPlayes,
     edges,
     nodes,
@@ -33,6 +32,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
     setGraphNodes,
   } = props;
   const copyString = "copied ";
+  const [valueForEdge, setValueForEdge] = useState(0);
   const [selected, setSelected] = useState<IEdge | INode | null>(null);
   const [copied, setCopied] = useState<IEdge | INode | null>(null);
   const [playersId, setPlayersId] = useState<number>(1);
@@ -152,7 +152,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
     const viewEdge: IEdge = {
       source: sourceViewNode[NODE_KEY],
       target: targetViewNode[NODE_KEY],
-      handleText: valueForEdge,
+      handleText: valueForEdge.toString(),
       type: NORMAL_EDGE,
     };
     if (shouldEdgeBeCreated(viewEdge)) {
@@ -221,6 +221,10 @@ export const GraphNotConnected = (props: IGraphProps) => {
 
   return (
     <div className="graph-container">
+      <GraphInputSection
+        valueForEdge={valueForEdge}
+        setValueForEdge={setValueForEdge}
+      />
       <GraphView
         showGraphControls={true}
         gridSize="100rem"

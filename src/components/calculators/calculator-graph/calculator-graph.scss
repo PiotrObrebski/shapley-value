@@ -7,6 +7,7 @@
   }
   .graph-container {
     height: 500px;
+    position: relative;
     .view-wrapper {
       position: relative;
       .graph-controls-wrapper {
@@ -38,6 +39,22 @@
             }
           }
         }
+      }
+    }
+    .graph-input-section {
+      height: 50px;
+      position: absolute;
+      z-index: 101;
+      border-radius: 2px;
+      border: solid 1px lightgray;
+      background-color: white;
+      color: #1e90ff;
+      padding: 8px;
+      bottom: 60px;
+      left: 15px;
+      .ant-row .ant-form-item {
+        margin: 0;
+        padding: 0;
       }
     }
   }

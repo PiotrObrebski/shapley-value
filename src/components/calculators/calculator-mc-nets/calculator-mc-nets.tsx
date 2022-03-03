@@ -102,9 +102,9 @@ export const CalculatorMCNetsNotConnected = (
 const mapStateToProps = (state: { aplication: Store }): McNetsGame => {
   const { nrOfPlayes, rules, shapleyValues } = state.aplication.mcNets ?? {};
   return {
-    nrOfPlayes: nrOfPlayes,
-    rules: rules,
-    shapleyValues: shapleyValues,
+    nrOfPlayes,
+    rules,
+    shapleyValues,
   };
 };
 

@@ -9,16 +9,11 @@ export const GraphInputSection = (props: IGraphInputSectionProps) => {
   return (
     <div className="graph-input-section">
       <Form
-        labelCol={{ span: 12 }}
-        wrapperCol={{ span: 12 }}
         layout="horizontal"
         size="middle"
         className="number-of-players-input"
       >
-        <Form.Item
-          labelAlign="right"
-          label="Before creating an edge set it's value"
-        >
+        <Form.Item labelAlign="right" label="Edge value">
           <InputNumber
             value={valueForEdge}
             onChange={(e) => setValueForEdge(e)}
