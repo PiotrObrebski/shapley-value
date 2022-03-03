@@ -134,7 +134,7 @@ export const calculateMCNetsShapleyValues = (
       values[parseFloat(player) - 1] += negativePlayersContribution;
     });
   });
-  return values;
+  return values.map((value) => Number(value.toFixed(2)));
 };
 
 export const generateCoalitionsFromEdges = (
@@ -231,6 +231,5 @@ export const generateFunctionOfCoalitionsFromMCNets = (
       }
     });
   });
-  functionOfCoalitions.map((el) => Number(el.toFixed(2)));
   return functionOfCoalitions;
 };
