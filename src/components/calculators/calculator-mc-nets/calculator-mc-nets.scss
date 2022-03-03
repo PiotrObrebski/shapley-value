@@ -1,0 +1,26 @@
+.mc-nets-rules {
+  max-height: 30vh;
+  overflow: auto;
+  .generate-panel .ant-collapse-header {
+    display: none;
+  }
+  .generate-panel .ant-collapse-content {
+    border: none;
+  }
+  .values-panel .ant-collapse-content-box {
+    padding: 10px;
+  }
+  .values-panel .ant-table-body {
+    max-height: 280px;
+  }
+  .mc-nets-rule {
+    margin-bottom: 20px;
+    .ant-col {
+      padding: 0;
+    }
+    .mc-nets-rule-name {
+      height: 72px;
+      margin-top: -22px;
+    }
+  }
+}

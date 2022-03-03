@@ -4,7 +4,6 @@ import { Button, Col, InputNumber, Row } from "antd";
 import { connect } from "react-redux";
 import { setMCNetsRules } from "../../../../redux/actions";
 import { generateCoalitionOfN } from "../../../../utilities/calculation-functions";
-import "./mc-nets-rule.css";
 import { PlayersGroup } from "./player-group/players-group";
 import { Store, IMCNetsRule, McNetsGame } from "../../../../type";
 export interface IMCNetsRuleProps {
@@ -37,7 +36,7 @@ export const MCNetsRuleNotConnected = (
   const plainOptions = generateCoalitionOfN(nrOfPlayes ?? 0).map(String);
   return (
     <div className="mc-nets-rule">
-      <Row align="middle" wrap={false} justify="center">
+      <Row wrap={false} justify="center">
         <Col flex="100px" className="mc-nets-rule-name">
           {`Rule nr ${index}`}
           <InputNumber
@@ -51,7 +50,6 @@ export const MCNetsRuleNotConnected = (
           />
         </Col>
         <Col flex="auto">
-          <div className="player-group-name">Positive Players</div>
           <PlayersGroup
             onChange={onPositiveChange}
             value={rules?.[index].positivePlayers ?? []}
@@ -59,18 +57,18 @@ export const MCNetsRuleNotConnected = (
           />
         </Col>
         <Col flex="auto">
-          <div className="player-group-name">Negative Players</div>
           <PlayersGroup
             onChange={onNegativeChange}
             value={rules?.[index].negativePlayers ?? []}
             options={plainOptions}
           />
         </Col>
-        <Col flex="32px">
+        <Col flex="48px">
           <Button
             type="primary"
             shape="circle"
             icon={<MinusOutlined />}
+            style={{ margin: "0 8px" }}
             onClick={() => {
               const tmpRules = [...(rules ?? [])];
               tmpRules.splice(index, 1);

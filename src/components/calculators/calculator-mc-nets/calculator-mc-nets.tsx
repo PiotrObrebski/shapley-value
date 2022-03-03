@@ -5,7 +5,7 @@ import DisplayGeneratedValues from "../../shared-components/display-generated-va
 import NumberOfPlayersForm from "../../shared-components/number-of-players-input";
 import { AddMCNetsRule } from "./add-mc-nets-rule/add-mc-nets-rule";
 import { MCNetsRule } from "./mc-nets-rule/mc-nets-rule";
-import "./calculator-mc-nets.css";
+import "./calculator-mc-nets.scss";
 import {
   setMCNetsNumberOfPlayers,
   setMCNetsShapleyValues,
@@ -50,8 +50,19 @@ export const CalculatorMCNetsNotConnected = (
               <AddMCNetsRule />
             </Col>
           </Row>
-
           <div className="mc-nets-rules">
+            {rules?.length ? (
+              <Row align="middle" wrap={false} justify="center">
+                <Col flex="100px" className="mc-nets-rule-name"></Col>
+
+                <Col flex="auto">
+                  <div className="player-group-name">Positive Players</div>
+                </Col>
+                <Col flex="auto">
+                  <div className="player-group-name">Negative Players</div>
+                </Col>
+              </Row>
+            ) : null}
             {rules?.map((_rule, index) => {
               return <MCNetsRule key={index} index={index} />;
             })}
