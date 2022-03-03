@@ -10,6 +10,7 @@ import {
 import { GraphGame, Store } from "../../../type";
 import { connect } from "react-redux";
 import { GraphInputSection } from "./graph-input-section";
+import { separatorString } from "../../../utilities/calculation-functions";
 
 interface IGraphProps extends GraphGame {
   setGraphNumberOfPlayers: (nrOfPlayes: number) => void;
@@ -21,7 +22,6 @@ String.prototype.elementAfterSplit = function (
 ): string | undefined {
   return this.split(separator).at(-1);
 };
-export const separatorString = "-copy-of-";
 export const GraphNotConnected = (props: IGraphProps) => {
   const {
     nrOfPlayes,
@@ -35,7 +35,6 @@ export const GraphNotConnected = (props: IGraphProps) => {
   const [valueForEdge, setValueForEdge] = useState(0);
   const [selected, setSelected] = useState<IEdge | INode | null>(null);
   const [copied, setCopied] = useState<IEdge | INode | null>(null);
-  const [playersId, setPlayersId] = useState<number>(1);
   const refElement = useRef<Component<IGraphViewProps>>(null);
 
   const getNodeIndex = (searchNode: { [x: string]: string }): number => {
@@ -83,7 +82,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
       .map(Number);
     const newPlayerNr = firstMissingPositive(playersNumbers);
     const viewNode = {
-      id: `${playersId + 1}`,
+      id: `${newPlayerNr}`,
       title: `${newPlayerNr}`,
       type: PLAYER_TYPE,
       x,
@@ -91,7 +90,6 @@ export const GraphNotConnected = (props: IGraphProps) => {
     };
     tmpNodes.push(viewNode);
     setGraphNumberOfPlayers(newPlayerNr);
-    setPlayersId(playersId + 1);
     setGraphNodes(tmpNodes);
     setSelected(viewNode);
   };
@@ -106,7 +104,9 @@ export const GraphNotConnected = (props: IGraphProps) => {
         edge.source !== viewNode[NODE_KEY] && edge.target !== viewNode[NODE_KEY]
       );
     });
-    setGraphNumberOfPlayers(nrOfPlayes ? nrOfPlayes - 1 : 0);
+    if (!viewNode.title.includes(copyString)) {
+      setGraphNumberOfPlayers(nrOfPlayes ? nrOfPlayes - 1 : 0);
+    }
     setGraphNodes(nodeArr);
     setGraphEdges(newEdges ?? []);
     setSelected(null);
@@ -117,32 +117,40 @@ export const GraphNotConnected = (props: IGraphProps) => {
       viewEdge.source?.elementAfterSplit(separatorString);
     const viewEdgeRealTarget =
       viewEdge.target?.elementAfterSplit(separatorString);
+
     const isConnectionDefined = edges?.some((edge) => {
       const edgeSourceRealTitle =
         edge?.source?.elementAfterSplit(separatorString);
       const edgeTargetRealTitle =
         edge?.target?.elementAfterSplit(separatorString);
+
       if (
         viewEdgeRealSource === edgeSourceRealTitle &&
         viewEdgeRealTarget === edgeTargetRealTitle
       ) {
         return true;
       }
+
       if (
         viewEdgeRealSource === edgeTargetRealTitle &&
         viewEdgeRealTarget === edgeSourceRealTitle
       ) {
         return true;
       }
+
       return false;
     });
+
     const isSourceCopy = viewEdge.source.includes(separatorString);
     const isTargetCopy = viewEdge.target.includes(separatorString);
     const isTargetOriginal = viewEdgeRealTarget === viewEdgeRealSource;
     const isConnectionValid = !(isSourceCopy && !isTargetOriginal);
     return (
+      //is the same
       viewEdge.source !== viewEdge.target &&
+      //is already defined
       !isConnectionDefined &&
+      // apply to game rules
       isConnectionValid &&
       !isTargetCopy
     );
@@ -211,11 +219,10 @@ export const GraphNotConnected = (props: IGraphProps) => {
       const tmpNodes = nodes;
       const newNode = {
         ...copied,
-        id: `${playersId + 1}${separatorString}${copied.id}`,
+        id: `${(nrOfPlayes ?? 0) + 1}${separatorString}${copied.id}`,
         title: `${copyString}${copied.title}`,
       };
       setGraphNodes([...(tmpNodes ?? []), newNode]);
-      setPlayersId(playersId + 1);
     }
   };
 

@@ -2,6 +2,7 @@ import { IEdge } from "react-digraph";
 import _ from "underscore";
 import { IMCNetsRule } from "../type";
 
+export const separatorString = "-copy-of-";
 export const indexOfArrayInArray = (
   arrayOfArrays: number[][],
   arrayToFind: number[]
@@ -140,8 +141,8 @@ export const generateCoalitionsFromEdges = (
   edges: IEdge[]
 ): Array<{ value: number; coalition: number[] }> => {
   return edges.map((edge) => {
-    const source = parseFloat(edge.source.split("-copy-of-").at(-1) ?? "");
-    const target = parseFloat(edge.target.split("-copy-of-").at(-1) ?? "");
+    const source = parseFloat(edge.source.split(separatorString).at(-1) ?? "");
+    const target = parseFloat(edge.target.split(separatorString).at(-1) ?? "");
     const value = parseFloat(edge.handleText ?? "");
     return {
       value,
@@ -167,8 +168,8 @@ export const calculateGraphShapleyValues = (
 };
 export const generateMCNetsRulesFromEdges = (edges: IEdge[]): IMCNetsRule[] => {
   return edges.map((edge) => {
-    const source = edge.source.split("-copy-of-").at(-1) ?? "";
-    const target = edge.target.split("-copy-of-").at(-1) ?? "";
+    const source = edge.source.split(separatorString).at(-1) ?? "";
+    const target = edge.target.split(separatorString).at(-1) ?? "";
     const value = parseFloat(edge.handleText ?? "");
     return {
       value,
@@ -177,3 +178,33 @@ export const generateMCNetsRulesFromEdges = (edges: IEdge[]): IMCNetsRule[] => {
     };
   });
 };
+export const generateCoalitionsCoalitionsFromEdges = (
+  edges: IEdge[]
+): number[][] => {
+  return edges.map((edge) => {
+    const source = parseFloat(edge.source.split(separatorString).at(-1) ?? "");
+    const target = parseFloat(edge.target.split(separatorString).at(-1) ?? "");
+    return source === target ? [source] : [source, target];
+  });
+};
+
+export const generateFunctionOfCoalitionsFromEdges = (
+  coalitions: number[][],
+  edges: IEdge[]
+) =>
+  coalitions.map((coalition) => {
+    let value = 0;
+    edges?.forEach((edge) => {
+      const coalitionContainSourceAndTarget =
+        coalition.includes(
+          parseFloat(edge.source.elementAfterSplit(separatorString) ?? "0")
+        ) &&
+        coalition.includes(
+          parseFloat(edge.target.elementAfterSplit(separatorString) ?? "0")
+        );
+      if (coalitionContainSourceAndTarget) {
+        value += parseFloat(edge.handleText ?? "0");
+      }
+    });
+    return value;
+  });

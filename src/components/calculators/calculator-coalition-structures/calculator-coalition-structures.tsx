@@ -89,6 +89,10 @@ const CalculatorCoalitionStructuresNotConnected = (
     }
   }, [grandCoalition, setCoalitionsCoalitions]);
 
+  useEffect(() => {
+    setGrandCalition(generateCoalitionOfN(nrOfPlayes ?? 0));
+  }, [nrOfPlayes]);
+
   const handleForce = (data: any) => {
     const newCoalitions: number[][] = [];
     const newFunctionOfCoalitions: number[] = [];
@@ -179,7 +183,7 @@ const CalculatorCoalitionStructuresNotConnected = (
         <Col className="buttons-col" xs={24} sm={24} md={24} lg={4} xl={4}>
           <Button
             type="primary"
-            disabled={!grandCoalition.length}
+            disabled={!nrOfPlayes}
             className="generate-button"
             onClick={() =>
               setCoalitionsShapleyValues(
@@ -194,7 +198,7 @@ const CalculatorCoalitionStructuresNotConnected = (
             Generate Shapley Values
           </Button>
           <Button
-            disabled={!grandCoalition.length}
+            disabled={!nrOfPlayes}
             className="generate-button"
             onClick={translateToMCNets}
           >

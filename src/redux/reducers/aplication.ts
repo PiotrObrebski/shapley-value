@@ -4,6 +4,7 @@ import ActionTypes from "../actionTypes";
 
 const initialState: Store = {
   graph: {
+    nrOfPlayes: 1,
     nodes: [
       {
         id: "1",
