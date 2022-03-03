@@ -9,11 +9,6 @@ export const edgeTypes = [NORMAL_EDGE];
 const playerShape = (
   <symbol viewBox="0 0 200 200" id="player">
     <circle cx="100" cy="100" r="50" />
-    <g>
-      <foreignObject width="100%" height="100%">
-        <div>test</div>
-      </foreignObject>
-    </g>
   </symbol>
 );
 
