@@ -210,12 +210,27 @@ export const generateFunctionOfCoalitionsFromEdges = (
     });
     return value;
   });
+
 export const generateFunctionOfCoalitionsFromMCNets = (
-  reles: IMCNetsRule[],
-  nrOfCoalitions: number
+  rules: IMCNetsRule[],
+  coalitions: number[][]
 ): number[] => {
-  const functionOfCoalitions = Array(nrOfCoalitions).fill(0);
-  console.log(functionOfCoalitions);
+  const functionOfCoalitions = Array(coalitions.length).fill(0);
+  coalitions.forEach((coalition) => {
+    rules.forEach((rule) => {
+      if (
+        rule.positivePlayers.every((player) =>
+          coalition.includes(parseFloat(player))
+        ) &&
+        !rule.negativePlayers.some((player) =>
+          coalition.includes(parseFloat(player))
+        )
+      ) {
+        functionOfCoalitions[indexOfArrayInArray(coalitions, coalition)] +=
+          rule.value;
+      }
+    });
+  });
 
   return functionOfCoalitions;
 };

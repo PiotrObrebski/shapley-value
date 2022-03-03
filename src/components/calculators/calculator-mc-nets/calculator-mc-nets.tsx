@@ -67,7 +67,7 @@ export const CalculatorMCNetsNotConnected = (
     setCoalitionsNumberOfplayers(nrOfPlayes ?? 0);
     setCoalitionsCoalitions(coalitions);
     setCoalitionsFunctionOfCoalitions(
-      generateFunctionOfCoalitionsFromMCNets(rules ?? [], coalitions.length)
+      generateFunctionOfCoalitionsFromMCNets(rules ?? [], coalitions)
     );
     setActiveTabKey("coalition");
   };
@@ -104,7 +104,7 @@ export const CalculatorMCNetsNotConnected = (
                 Generate Shapley Values
               </Button>
               <Button
-                disabled={!nrOfPlayes}
+                disabled={!nrOfPlayes && (nrOfPlayes ?? 0) < 10}
                 className="generate-button"
                 onClick={translateMCNetsToCoalitions}
                 style={{ marginLeft: "16px" }}
