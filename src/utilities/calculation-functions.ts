@@ -121,10 +121,11 @@ export const calculateMCNetsShapleyValues = (
       );
     const negativePlayersContribution =
       calculateNegativePlayersMarginalContribution(
-        numberOfNegativePlayers,
         numberOfPositivePlayers,
+        numberOfNegativePlayers,
         rule.value
       );
+    console.log(positivePlayersContribution, negativePlayersContribution);
 
     rule.positivePlayers.forEach((player) => {
       values[parseFloat(player) - 1] += positivePlayersContribution;

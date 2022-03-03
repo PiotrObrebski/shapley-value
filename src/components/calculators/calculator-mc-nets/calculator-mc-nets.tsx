@@ -28,8 +28,11 @@ export const CalculatorMCNetsNotConnected = (
     setMCNetsNumberOfPlayers,
     setMCNetsShapleyValues,
   } = props;
-  const handleNumberOfPlayesChange = (event: number) =>
+  const handleNumberOfPlayesChange = (event: number) => {
     setMCNetsNumberOfPlayers(event);
+    setMCNetsShapleyValues([]);
+  };
+
   const [activeKeys, setActiveKeys] = useState<string[]>(["1", "2"]);
   return (
     <div className="calculator-mc-nets">
@@ -55,7 +58,10 @@ export const CalculatorMCNetsNotConnected = (
                   setMCNetsShapleyValues(
                     calculateMCNetsShapleyValues(rules ?? [], nrOfPlayes ?? 0)
                   );
-                  setActiveKeys(["2"]);
+                  const tmpActiveKeys = activeKeys.includes("2")
+                    ? activeKeys
+                    : [...activeKeys, "2"];
+                  setActiveKeys(tmpActiveKeys);
                 }}
               >
                 Generate Shapley Values
