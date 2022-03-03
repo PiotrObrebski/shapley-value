@@ -1,0 +1,58 @@
+.coalition-structures-input,
+.display-generated-values {
+  max-width: 400px;
+  margin: 0 auto;
+}
+.error-message {
+  text-align: center;
+  color: red;
+  font-size: 0.8em;
+}
+.number-of-players-input .ant-row.ant-form-item {
+  padding-bottom: 8px;
+  line-height: 32px;
+}
+.ant-form.ant-form-horizontal .ant-row.ant-form-item {
+  margin-bottom: 4px;
+}
+.function-inputs {
+  padding: 10px;
+}
+.ScrollbarsCustom-Track.ScrollbarsCustom-TrackY {
+  width: 7px !important;
+}
+.buttons-col {
+  display: flex;
+  flex-direction: column;
+  .ant-btn.generate-button {
+    margin: 8px;
+  }
+}
+.upload,
+.download {
+  text-align: center;
+  margin: 10px auto;
+  .csv-label {
+    display: block;
+  }
+}
+
+@media (max-width: 575px) {
+  .ant-form .ant-form-item .ant-form-item-label,
+  .ant-form .ant-form-item .ant-form-item-control {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .ant-form-item .ant-form-item-label {
+    padding: 0;
+    line-height: 1.5715;
+    white-space: initial;
+    text-align: right;
+  }
+  .ant-form-item-label > label::after {
+    content: ":";
+    display: block;
+    top: -0.5px;
+    margin: 0 8px 0 2px;
+  }
+}

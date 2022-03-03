@@ -39,14 +39,29 @@ export const CalculatorMCNetsNotConnected = (
       >
         <Collapse.Panel header="Game Definition" key="1">
           <Row justify="center">
-            <Col span={12}>
+            <Col span={8}>
               <NumberOfPlayersForm
                 maxValue={20}
                 numberOfPlayers={nrOfPlayes}
                 handleNumberOfPlayesChange={handleNumberOfPlayesChange}
               />
             </Col>
-            <Col span={12}>
+            <Col span={8}>
+              <Button
+                type="primary"
+                disabled={!nrOfPlayes}
+                className="generate-button"
+                onClick={() => {
+                  setMCNetsShapleyValues(
+                    calculateMCNetsShapleyValues(rules ?? [], nrOfPlayes ?? 0)
+                  );
+                  setActiveKeys(["2"]);
+                }}
+              >
+                Generate Shapley Values
+              </Button>
+            </Col>
+            <Col span={8}>
               <AddMCNetsRule />
             </Col>
           </Row>
@@ -69,35 +84,8 @@ export const CalculatorMCNetsNotConnected = (
           </div>
         </Collapse.Panel>
         <Collapse.Panel
-          header=""
-          key="2"
-          showArrow={false}
-          forceRender={true}
-          collapsible="disabled"
-          className="generate-panel"
-        >
-          <Row justify="center" gutter={32}>
-            <Button
-              type="primary"
-              disabled={!nrOfPlayes}
-              className="generate-button"
-              onClick={() => {
-                setMCNetsShapleyValues(
-                  calculateMCNetsShapleyValues(rules ?? [], nrOfPlayes ?? 0)
-                );
-                const tmpActiveKeys = activeKeys.includes("3")
-                  ? activeKeys
-                  : [...activeKeys, "3"];
-                setActiveKeys(tmpActiveKeys);
-              }}
-            >
-              Calculate
-            </Button>
-          </Row>
-        </Collapse.Panel>
-        <Collapse.Panel
           header="Shapley Values"
-          key="3"
+          key="2"
           className="values-panel"
         >
           <DisplayGeneratedValues

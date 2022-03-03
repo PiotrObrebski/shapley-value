@@ -71,6 +71,7 @@ export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
     );
     setActiveTabKey("coalition");
   };
+
   return (
     <div className="calculator-graph">
       <Row justify="space-around" style={{ marginBottom: "16px" }}>
@@ -105,7 +106,7 @@ export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
           Translate to MC Nets
         </Button>
         <Button
-          disabled={!edges?.length}
+          disabled={!edges?.length || (nrOfPlayes ?? 0) > 9}
           className="generate-button"
           onClick={translateGraphToCoalitions}
         >

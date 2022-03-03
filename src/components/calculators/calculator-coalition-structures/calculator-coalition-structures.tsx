@@ -1,6 +1,6 @@
-import { Button, Col, Row } from "antd";
 import React, { useEffect, useState } from "react";
-import "./calculator-coalition-structures.css";
+import { Button, Col, Row } from "antd";
+import "./calculator-coalition-structures.scss";
 import {
   calculateAllShapleyValues,
   generateCoalitions,
@@ -128,24 +128,19 @@ const CalculatorCoalitionStructuresNotConnected = (
 
   const translateToMCNets = () => {
     const newRules: IMCNetsRule[] = [];
-    let newNumberOfPlayers = 0;
     functionOfCoalitions?.forEach((value, index) => {
       if (value) {
-        const highestPlayerInCoalition = Math.max(
-          ...(coalitions?.[index] ?? [])
-        );
-        newNumberOfPlayers =
-          highestPlayerInCoalition > newNumberOfPlayers
-            ? highestPlayerInCoalition
-            : newNumberOfPlayers;
         newRules.push({
           positivePlayers: coalitions?.[index]?.map(String) ?? [],
-          negativePlayers: [],
-          value: value,
+          negativePlayers:
+            grandCoalition
+              .filter((player) => !coalitions?.[index]?.includes(player))
+              .map(String) ?? [],
+          value: value ?? 0,
         });
       }
     });
-    setMCNetsNumberOfPlayers(newNumberOfPlayers);
+    setMCNetsNumberOfPlayers(grandCoalition.length);
     setMCNetsRules(newRules);
     setActiveTabKey("mc-nets");
   };
@@ -184,6 +179,7 @@ const CalculatorCoalitionStructuresNotConnected = (
           <Button
             type="primary"
             disabled={!nrOfPlayes}
+            style={{ margin: "8px" }}
             className="generate-button"
             onClick={() =>
               setCoalitionsShapleyValues(

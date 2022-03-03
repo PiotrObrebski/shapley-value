@@ -166,6 +166,7 @@ export const calculateGraphShapleyValues = (
     return value;
   });
 };
+
 export const generateMCNetsRulesFromEdges = (edges: IEdge[]): IMCNetsRule[] => {
   return edges.map((edge) => {
     const source = edge.source.split(separatorString).at(-1) ?? "";
@@ -178,6 +179,7 @@ export const generateMCNetsRulesFromEdges = (edges: IEdge[]): IMCNetsRule[] => {
     };
   });
 };
+
 export const generateCoalitionsCoalitionsFromEdges = (
   edges: IEdge[]
 ): number[][] => {
