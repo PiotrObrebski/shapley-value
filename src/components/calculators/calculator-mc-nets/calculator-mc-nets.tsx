@@ -16,6 +16,7 @@ import {
   setCoalitionsFunctionOfCoalitions,
   setCoalitionsNumberOfplayers,
   setMCNetsNumberOfPlayers,
+  setMCNetsRules,
   setMCNetsShapleyValues,
 } from "../../../redux/actions";
 import { connect } from "react-redux";
@@ -26,6 +27,7 @@ interface ICalculatorMCNetsProps extends McNetsGame {
   setActiveTabKey: React.Dispatch<React.SetStateAction<TabsKeys>>;
   setMCNetsNumberOfPlayers: (nrOfPlayes: number) => void;
   setMCNetsShapleyValues: (shapleyValues: number[]) => void;
+  setMCNetsRules: (rules: IMCNetsRule[]) => void;
   setCoalitionsNumberOfplayers: (nrOfPlayes: number) => {
     type: string;
     payload: number;
@@ -57,6 +59,18 @@ export const CalculatorMCNetsNotConnected = (
   const handleNumberOfPlayesChange = (event: number) => {
     setMCNetsNumberOfPlayers(event);
     setMCNetsShapleyValues([]);
+    setMCNetsRules(
+      rules?.map((rule) => {
+        const tmpRule = { ...rule };
+        tmpRule.positivePlayers.pop();
+        tmpRule.negativePlayers.pop();
+        return {
+          value: tmpRule.value,
+          positivePlayers: tmpRule.positivePlayers.splice(0, -1),
+          negativePlayers: tmpRule.negativePlayers.splice(0, -1),
+        };
+      }) ?? []
+    );
   };
 
   const [activeKeys, setActiveKeys] = useState<string[]>(["1"]);
@@ -169,6 +183,7 @@ const mapDispatchToProps = (
       dispatch(setMCNetsNumberOfPlayers(nrOfPlayes)),
     setMCNetsShapleyValues: (shapleyValues: number[]) =>
       dispatch(setMCNetsShapleyValues(shapleyValues)),
+    setMCNetsRules: (rules: IMCNetsRule[]) => dispatch(setMCNetsRules(rules)),
     setCoalitionsNumberOfplayers: (nrOfPlayes: number) =>
       dispatch(setCoalitionsNumberOfplayers(nrOfPlayes)),
     setCoalitionsCoalitions: (coalitions: number[][]) =>

@@ -231,6 +231,6 @@ export const generateFunctionOfCoalitionsFromMCNets = (
       }
     });
   });
-
+  functionOfCoalitions.map((el) => Number(el.toFixed(2)));
   return functionOfCoalitions;
 };
