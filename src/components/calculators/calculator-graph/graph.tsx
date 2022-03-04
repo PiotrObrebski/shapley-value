@@ -17,11 +17,7 @@ interface IGraphProps extends GraphGame {
   setGraphNodes: (nodes: INode[]) => void;
   setGraphEdges: (edges: IEdge[]) => void;
 }
-String.prototype.elementAfterSplit = function (
-  separator: string
-): string | undefined {
-  return this.split(separator).at(-1);
-};
+
 export const GraphNotConnected = (props: IGraphProps) => {
   const {
     nrOfPlayes,
