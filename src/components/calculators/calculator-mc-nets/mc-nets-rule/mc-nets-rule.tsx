@@ -34,6 +34,7 @@ export const MCNetsRuleNotConnected = (
   };
 
   const plainOptions = generateCoalitionOfN(nrOfPlayes ?? 0).map(String);
+
   return (
     <div className="mc-nets-rule">
       <Row wrap={false} justify="center">

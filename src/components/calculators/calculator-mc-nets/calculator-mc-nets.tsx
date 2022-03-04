@@ -52,25 +52,32 @@ export const CalculatorMCNetsNotConnected = (
     setActiveTabKey,
     setMCNetsNumberOfPlayers,
     setMCNetsShapleyValues,
+    setMCNetsRules,
     setCoalitionsNumberOfplayers,
     setCoalitionsCoalitions,
     setCoalitionsFunctionOfCoalitions,
   } = props;
   const handleNumberOfPlayesChange = (event: number) => {
+    const isDecrement = event < (nrOfPlayes ?? 0);
     setMCNetsNumberOfPlayers(event);
     setMCNetsShapleyValues([]);
-    setMCNetsRules(
-      rules?.map((rule) => {
-        const tmpRule = { ...rule };
-        tmpRule.positivePlayers.pop();
-        tmpRule.negativePlayers.pop();
-        return {
-          value: tmpRule.value,
-          positivePlayers: tmpRule.positivePlayers.splice(0, -1),
-          negativePlayers: tmpRule.negativePlayers.splice(0, -1),
-        };
-      }) ?? []
-    );
+    if (isDecrement) {
+      setMCNetsRules(
+        rules?.map((rule) => {
+          const { value, positivePlayers, negativePlayers } = rule;
+          const nrOfPlayersString = (nrOfPlayes ?? 0).toString();
+          return {
+            value,
+            positivePlayers: positivePlayers.filter(
+              (player) => player !== nrOfPlayersString
+            ),
+            negativePlayers: negativePlayers.filter(
+              (player) => player !== nrOfPlayersString
+            ),
+          };
+        }) ?? []
+      );
+    }
   };
 
   const [activeKeys, setActiveKeys] = useState<string[]>(["1"]);

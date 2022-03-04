@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Col, Row } from "antd";
 import "./calculator-coalition-structures.scss";
 import {
@@ -9,7 +9,6 @@ import {
 import CoalitionStructuresInput from "./coalition-structures-input";
 import NumberOfPlayersForm from "../../shared-components/number-of-players-input";
 import DisplayGeneratedValues from "../../shared-components/display-generated-values";
-import CSVReader from "react-csv-reader";
 import { connect } from "react-redux";
 import {
   setCoalitionsCoalitions,
@@ -21,6 +20,7 @@ import {
 } from "../../../redux/actions";
 import { TabsKeys } from "../../layout/body/app-body/app-body";
 import { CoalitionsGame, IMCNetsRule, Store } from "../../../type";
+import CSVInput from "./csv-input";
 
 interface ICalculatorCoalitionStructuresProps extends CoalitionsGame {
   setActiveTabKey: React.Dispatch<React.SetStateAction<TabsKeys>>;
@@ -70,6 +70,7 @@ const CalculatorCoalitionStructuresNotConnected = (
     nrOfPlayes ? generateCoalitionOfN(nrOfPlayes) : []
   );
   const [message, setMessage] = useState<string | undefined>(undefined);
+  const inputRef = useRef<HTMLInputElement>(null);
   const maxValue = 10;
   const handleNumberOfPlayesChange = (event: number) => {
     if (event < maxValue) {
@@ -112,6 +113,9 @@ const CalculatorCoalitionStructuresNotConnected = (
     setCoalitionsNumberOfplayers(numberOfPlayers);
     setCoalitionsCoalitions(newCoalitions);
     setCoalitionsFunctionOfCoalitions(newFunctionOfCoalitions);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
   };
 
   const handleDownloadGameDefinition = () => {
@@ -157,11 +161,17 @@ const CalculatorCoalitionStructuresNotConnected = (
         <Col xs={24} sm={24} md={24} lg={10} xl={10}>
           <CoalitionStructuresInput />
           <div className="upload">
-            <CSVReader
+            <CSVInput
               cssClass="react-csv-input"
-              label={<span>Upload game definition from .csv file </span>}
+              label={
+                <div className="ant-btn ant-btn-default">
+                  <span>Upload game definition from .csv file</span>{" "}
+                </div>
+              }
               onFileLoaded={handleForce}
+              inputStyle={{ display: "none" }}
               inputName="input2"
+              inputRef={inputRef}
               parserOptions={{
                 header: false,
                 dynamicTyping: true,
