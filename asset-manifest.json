@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/shapley-value/static/css/main.e40d4a31.chunk.css",
-    "main.js": "/shapley-value/static/js/main.55ce7716.chunk.js",
-    "main.js.map": "/shapley-value/static/js/main.55ce7716.chunk.js.map",
+    "main.js": "/shapley-value/static/js/main.412ef547.chunk.js",
+    "main.js.map": "/shapley-value/static/js/main.412ef547.chunk.js.map",
     "runtime-main.js": "/shapley-value/static/js/runtime-main.4105d692.js",
     "runtime-main.js.map": "/shapley-value/static/js/runtime-main.4105d692.js.map",
     "static/css/2.5d83b9bd.chunk.css": "/shapley-value/static/css/2.5d83b9bd.chunk.css",
     "static/js/2.ff442e82.chunk.js": "/shapley-value/static/js/2.ff442e82.chunk.js",
     "static/js/2.ff442e82.chunk.js.map": "/shapley-value/static/js/2.ff442e82.chunk.js.map",
     "index.html": "/shapley-value/index.html",
-    "precache-manifest.f0c875e282d180c1ee38e695954481c5.js": "/shapley-value/precache-manifest.f0c875e282d180c1ee38e695954481c5.js",
+    "precache-manifest.fdc18a83affa28477bcb5bb884c6bb3e.js": "/shapley-value/precache-manifest.fdc18a83affa28477bcb5bb884c6bb3e.js",
     "service-worker.js": "/shapley-value/service-worker.js",
     "static/css/2.5d83b9bd.chunk.css.map": "/shapley-value/static/css/2.5d83b9bd.chunk.css.map",
     "static/css/main.e40d4a31.chunk.css.map": "/shapley-value/static/css/main.e40d4a31.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.5d83b9bd.chunk.css",
     "static/js/2.ff442e82.chunk.js",
     "static/css/main.e40d4a31.chunk.css",
-    "static/js/main.55ce7716.chunk.js"
+    "static/js/main.412ef547.chunk.js"
   ]
 }
