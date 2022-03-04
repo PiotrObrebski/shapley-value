@@ -192,8 +192,8 @@ export const GraphNotConnected = (props: IGraphProps) => {
       return;
     }
     if (selected) {
-      const x = selected.x + 20;
-      const y = selected.y + 20;
+      const x = (selected.x + 20).toString();
+      const y = (selected.y + 20).toString();
       setCopied({ ...selected, x, y });
     }
   };
@@ -230,7 +230,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
       />
       <GraphView
         showGraphControls={true}
-        gridSize="100rem"
+        gridSize={12000}
         gridDotSize={1}
         ref={refElement}
         nodeKey={NODE_KEY}
