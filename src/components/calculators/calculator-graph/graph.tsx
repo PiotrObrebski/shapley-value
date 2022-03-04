@@ -32,6 +32,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
   const [selected, setSelected] = useState<IEdge | INode | null>(null);
   const [copied, setCopied] = useState<IEdge | INode | null>(null);
   const refElement = useRef<Component<IGraphViewProps>>(null);
+  console.log(edges);
 
   const getNodeIndex = (searchNode: { [x: string]: string }): number => {
     return nodes

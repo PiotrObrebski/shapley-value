@@ -127,6 +127,7 @@ export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
     </div>
   );
 };
+
 const mapStateToProps = (state: { aplication: Store }): GraphGame => {
   const { nrOfPlayes, edges, shapleyValues } = state.aplication.graph || {};
   return {
