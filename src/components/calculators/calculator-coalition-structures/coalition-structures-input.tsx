@@ -40,6 +40,7 @@ export const CoalitionStructuresInputNotConnected = (
         <InputNumber
           value={functionOfCoalitions?.[record.key]}
           defaultValue={0}
+          disabled={!record.key}
           onChange={(event: number) => {
             const tmpFunction = functionOfCoalitions
               ? [...functionOfCoalitions]

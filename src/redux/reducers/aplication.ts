@@ -4,7 +4,7 @@ import ActionTypes from "../actionTypes";
 
 const initialState: Store = {
   graph: {
-    nrOfPlayes: 1,
+    nrOfPlayers: 1,
     nodes: [
       {
         id: "1",
@@ -83,7 +83,7 @@ export const aplication = (
         ...state,
         graph: {
           ...state.graph,
-          nrOfPlayes: action.payload,
+          nrOfPlayers: action.payload,
         },
       };
     case ActionTypes.SET_GRAPH_EDGES:

@@ -25,9 +25,9 @@ import { TabsKeys } from "../../layout/body/app-body/app-body";
 interface ICalculatorGraphProps extends GraphGame {
   setActiveTabKey: React.Dispatch<React.SetStateAction<TabsKeys>>;
   setGraphShapleyValues: (values: number[]) => void;
-  setMCNetsNumberOfPlayers: (nrOfPlayes: number) => void;
+  setMCNetsNumberOfPlayers: (nrOfPlayers: number) => void;
   setMCNetsRules: (rules: IMCNetsRule[]) => void;
-  setCoalitionsNumberOfplayers: (nrOfPlayes: number) => {
+  setCoalitionsNumberOfplayers: (nrOfPlayers: number) => {
     type: string;
     payload: number;
   };
@@ -43,7 +43,7 @@ interface ICalculatorGraphProps extends GraphGame {
 
 export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
   const {
-    nrOfPlayes,
+    nrOfPlayers,
     edges,
     shapleyValues,
     setActiveTabKey,
@@ -57,14 +57,14 @@ export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
   const [activeKeys, setActiveKeys] = useState<string[]>(["1"]);
   const translateGraphToMCNets = () => {
     setMCNetsRules(generateMCNetsRulesFromEdges(edges ?? []));
-    setMCNetsNumberOfPlayers(nrOfPlayes ?? 0);
+    setMCNetsNumberOfPlayers(nrOfPlayers ?? 0);
     setActiveTabKey("mc-nets");
   };
   const translateGraphToCoalitions = () => {
     const coalitions = generateCoalitions(
-      generateCoalitionOfN(nrOfPlayes ?? 0)
+      generateCoalitionOfN(nrOfPlayers ?? 0)
     );
-    setCoalitionsNumberOfplayers(nrOfPlayes ?? 0);
+    setCoalitionsNumberOfplayers(nrOfPlayers ?? 0);
     setCoalitionsCoalitions(coalitions);
     setCoalitionsFunctionOfCoalitions(
       generateFunctionOfCoalitionsFromEdges(coalitions, edges ?? [])
@@ -90,7 +90,7 @@ export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
             setActiveKeys(["2"]);
             setGraphShapleyValues(
               calculateGraphShapleyValues(
-                generateCoalitionOfN(nrOfPlayes ?? 0),
+                generateCoalitionOfN(nrOfPlayers ?? 0),
                 edges ?? []
               )
             );
@@ -106,11 +106,11 @@ export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
           Translate to MC Nets
         </Button>
         <Button
-          disabled={!edges?.length || (nrOfPlayes ?? 0) > 9}
+          disabled={!edges?.length || (nrOfPlayers ?? 0) > 10}
           className="generate-button"
           onClick={translateGraphToCoalitions}
         >
-          Translate to Coalitions
+          Translate to Characteristic function
         </Button>
       </Row>
       <Collapse
@@ -129,9 +129,9 @@ export const CalculatorGraphNotConnected = (props: ICalculatorGraphProps) => {
 };
 
 const mapStateToProps = (state: { aplication: Store }): GraphGame => {
-  const { nrOfPlayes, edges, shapleyValues } = state.aplication.graph || {};
+  const { nrOfPlayers, edges, shapleyValues } = state.aplication.graph || {};
   return {
-    nrOfPlayes,
+    nrOfPlayers,
     edges,
     shapleyValues,
   };
@@ -146,11 +146,11 @@ const mapDispatchToProps = (
   return {
     setGraphShapleyValues: (values: number[]) =>
       dispatch(setGraphShapleyValues(values)),
-    setMCNetsNumberOfPlayers: (nrOfPlayes: number) =>
-      dispatch(setMCNetsNumberOfPlayers(nrOfPlayes)),
+    setMCNetsNumberOfPlayers: (nrOfPlayers: number) =>
+      dispatch(setMCNetsNumberOfPlayers(nrOfPlayers)),
     setMCNetsRules: (rules: IMCNetsRule[]) => dispatch(setMCNetsRules(rules)),
-    setCoalitionsNumberOfplayers: (nrOfPlayes: number) =>
-      dispatch(setCoalitionsNumberOfplayers(nrOfPlayes)),
+    setCoalitionsNumberOfplayers: (nrOfPlayers: number) =>
+      dispatch(setCoalitionsNumberOfplayers(nrOfPlayers)),
     setCoalitionsCoalitions: (coalitions: number[][]) =>
       dispatch(setCoalitionsCoalitions(coalitions)),
     setCoalitionsFunctionOfCoalitions: (values: number[]) =>

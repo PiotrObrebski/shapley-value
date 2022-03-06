@@ -5,6 +5,7 @@ import {
   calculateAllShapleyValues,
   generateCoalitions,
   generateCoalitionOfN,
+  generateMCNetsRulesFromCoalitions,
 } from "../../../utilities/calculation-functions";
 import CoalitionStructuresInput from "./coalition-structures-input";
 import NumberOfPlayersForm from "../../shared-components/number-of-players-input";
@@ -131,21 +132,14 @@ const CalculatorCoalitionStructuresNotConnected = (
   };
 
   const translateToMCNets = () => {
-    const newRules: IMCNetsRule[] = [];
-    functionOfCoalitions?.forEach((value, index) => {
-      if (value) {
-        newRules.push({
-          positivePlayers: coalitions?.[index]?.map(String) ?? [],
-          negativePlayers:
-            grandCoalition
-              .filter((player) => !coalitions?.[index]?.includes(player))
-              .map(String) ?? [],
-          value: value ?? 0,
-        });
-      }
-    });
     setMCNetsNumberOfPlayers(grandCoalition.length);
-    setMCNetsRules(newRules);
+    setMCNetsRules(
+      generateMCNetsRulesFromCoalitions(
+        coalitions ?? [[]],
+        grandCoalition,
+        functionOfCoalitions ?? []
+      )
+    );
     setActiveTabKey("mc-nets");
   };
 

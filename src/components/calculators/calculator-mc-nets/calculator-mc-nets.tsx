@@ -100,40 +100,42 @@ export const CalculatorMCNetsNotConnected = (
       >
         <Collapse.Panel header="Game Definition" key="1">
           <Row justify="center" style={{ marginBottom: "16px" }}>
-            <Col span={8}>
+            <Col span={6}>
               <NumberOfPlayersForm
                 maxValue={20}
                 numberOfPlayers={nrOfPlayes}
                 handleNumberOfPlayesChange={handleNumberOfPlayesChange}
               />
             </Col>
-            <Col span={8}>
-              <Button
-                type="primary"
-                disabled={!nrOfPlayes}
-                className="generate-button"
-                onClick={() => {
-                  setMCNetsShapleyValues(
-                    calculateMCNetsShapleyValues(rules ?? [], nrOfPlayes ?? 0)
-                  );
-                  const tmpActiveKeys = activeKeys.includes("2")
-                    ? activeKeys
-                    : [...activeKeys, "2"];
-                  setActiveKeys(tmpActiveKeys);
-                }}
-              >
-                Generate Shapley Values
-              </Button>
-              <Button
-                disabled={!nrOfPlayes && (nrOfPlayes ?? 0) < 10}
-                className="generate-button"
-                onClick={translateMCNetsToCoalitions}
-                style={{ marginLeft: "16px" }}
-              >
-                Translate to Coalitions
-              </Button>
+            <Col span={12}>
+              <Row justify="center">
+                <Button
+                  type="primary"
+                  disabled={!nrOfPlayes}
+                  className="generate-button"
+                  onClick={() => {
+                    setMCNetsShapleyValues(
+                      calculateMCNetsShapleyValues(rules ?? [], nrOfPlayes ?? 0)
+                    );
+                    const tmpActiveKeys = activeKeys.includes("2")
+                      ? activeKeys
+                      : [...activeKeys, "2"];
+                    setActiveKeys(tmpActiveKeys);
+                  }}
+                >
+                  Generate Shapley Values
+                </Button>
+                <Button
+                  disabled={!nrOfPlayes && (nrOfPlayes ?? 0) < 10}
+                  className="generate-button"
+                  onClick={translateMCNetsToCoalitions}
+                  style={{ marginLeft: "8px" }}
+                >
+                  Translate to Characteristic function
+                </Button>
+              </Row>
             </Col>
-            <Col span={8}>
+            <Col span={6}>
               <AddMCNetsRule />
             </Col>
           </Row>

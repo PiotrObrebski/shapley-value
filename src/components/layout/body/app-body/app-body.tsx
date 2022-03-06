@@ -15,7 +15,7 @@ export const AppBody = (): JSX.Element => {
       onTabClick={(key: string) => setActiveTabKey(key as TabsKeys)}
       centered
     >
-      <TabPane tab="Coalition structures definition" key="coalition">
+      <TabPane tab="Characteristic function" key="coalition">
         <CalculatorCoalitionStructures setActiveTabKey={setActiveTabKey} />
       </TabPane>
       <TabPane tab="Function generating values" key="example">

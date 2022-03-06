@@ -23,7 +23,7 @@ interface IMCNetsRule {
   value: number;
 }
 interface GraphGame {
-  nrOfPlayes?: number;
+  nrOfPlayers?: number;
   edges?: IEdge[];
   nodes?: INode[];
   shapleyValues?: number[];

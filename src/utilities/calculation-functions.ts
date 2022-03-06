@@ -29,7 +29,16 @@ export const factorial = (n: number, r: number = 1) => {
   while (n > 0) r *= n--;
   return r;
 };
-
+export const randn_bm = (): number => {
+  let u = 0,
+    v = 0;
+  while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+  while (v === 0) v = Math.random();
+  let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  num = num / 10.0 + 0.5; // Translate to 0 -> 1
+  if (num > 1 || num < 0) return randn_bm(); // resample between 0 and 1
+  return num;
+};
 export const coalitionsGenerateShapleyValue = (
   player: number,
   players: number[],
@@ -232,4 +241,24 @@ export const generateFunctionOfCoalitionsFromMCNets = (
     });
   });
   return functionOfCoalitions;
+};
+export const generateMCNetsRulesFromCoalitions = (
+  coalitions: number[][],
+  grandCoalition: number[],
+  functionOfCoalitions: number[]
+) => {
+  const newRules: IMCNetsRule[] = [];
+  functionOfCoalitions?.forEach((value, index) => {
+    if (value) {
+      newRules.push({
+        positivePlayers: coalitions?.[index]?.map(String) ?? [],
+        negativePlayers:
+          grandCoalition
+            .filter((player) => !coalitions?.[index]?.includes(player))
+            .map(String) ?? [],
+        value: value ?? 0,
+      });
+    }
+  });
+  return newRules;
 };

@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Table } from "antd";
+import React, { useState } from "react";
+import { Button, Row, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import {
   setCoalitionsCoalitions,
@@ -17,7 +17,8 @@ import { connect } from "react-redux";
 import { coalitionsExamples, graphExamples, mcNetsExamples } from "./examples";
 import { TabsKeys } from "../../layout/body/app-body/app-body";
 import { IEdge, INode } from "react-digraph";
-
+import "./game-examples.scss";
+import InputElement from "./input-element";
 interface IGameExamplesProps {
   setActiveTabKey: React.Dispatch<React.SetStateAction<TabsKeys>>;
   setMCNetsNumberOfPlayers: (nrOfPlayes: number) => void;
@@ -53,44 +54,58 @@ export const GameExamplesNotConnected = (
     setGraphEdges,
     setGraphNodes,
   } = props;
-  const loadCoalitionStructureGame = (chosenGame: string) => {
-    switch (chosenGame) {
-      case "something":
-        setCoalitionsNumberOfplayers(coalitionsExamples[0].nrOfPlayers);
-        setCoalitionsCoalitions(coalitionsExamples[0].coalitions);
-        setCoalitionsFunctionOfCoalitions(
-          coalitionsExamples[0].functionOfCoalitions
-        );
-        break;
-      default:
-        console.warn("Invalid game example");
-    }
+  const [kVariable, setKVariable] = useState(1);
+  const [nrOfPlayers, setNrOfPlayers] = useState(1);
+  const loadCoalitionStructureGame = (chosenGame: number) => {
+    const example = coalitionsExamples(nrOfPlayers, kVariable)[chosenGame];
+    setCoalitionsNumberOfplayers(example.nrOfPlayers);
+    setCoalitionsCoalitions(example.coalitions);
+    setCoalitionsFunctionOfCoalitions(example.functionOfCoalitions);
     setActiveTabKey("coalition");
   };
-  const loadMCNetsGame = (chosenGame: string) => {
-    switch (chosenGame) {
-      case "something":
-        setMCNetsNumberOfPlayers(mcNetsExamples[0].nrOfPlayers);
-        setMCNetsRules(mcNetsExamples[0].rules);
-        break;
-      default:
-        console.warn("Invalid game example");
-    }
+  const loadMCNetsGame = (chosenGame: number) => {
+    const example = mcNetsExamples(nrOfPlayers, kVariable)[chosenGame];
+    setMCNetsNumberOfPlayers(example.nrOfPlayers);
+    setMCNetsRules(example.rules);
     setActiveTabKey("mc-nets");
   };
-  const loadGraphGame = (chosenGame: string) => {
-    switch (chosenGame) {
-      case "something":
-        setGraphNumberOfPlayers(graphExamples[0].nrOfPlayers);
-        setGraphNodes(graphExamples[0].nodes);
-        setGraphEdges(graphExamples[0].edges);
-        break;
-      default:
-        console.warn("Invalid game example");
-    }
+  const loadGraphGame = (chosenGame: number) => {
+    const example = graphExamples(nrOfPlayers, kVariable)[chosenGame];
+    setGraphNumberOfPlayers(example.nrOfPlayers);
+    setGraphNodes(example.nodes);
+    setGraphEdges(example.edges);
     setActiveTabKey("graph");
   };
-  const dataSource = [{ description: "Simple example", example: "something" }];
+  const dataSource = [
+    {
+      description: "f(C) = k*|C|",
+      example: 0,
+    },
+    {
+      description: "f(C) = |C|^k",
+      example: 1,
+    },
+    {
+      description: "f(C) = k*max(i in C)",
+      example: 2,
+    },
+    {
+      description: "f(C) = k*min(i in C)",
+      example: 3,
+    },
+    {
+      description: "f(C) = k*avg(i in C)",
+      example: 4,
+    },
+    {
+      description: "f(C) = k*|C|*uniform(0,1)",
+      example: 5,
+    },
+    {
+      description: "f(C) = k*|C|*normal(0,1)",
+      example: 6,
+    },
+  ];
   const columns = [
     {
       title: "Game description",
@@ -102,15 +117,22 @@ export const GameExamplesNotConnected = (
       dataIndex: "example",
       key: "example",
       width: 280,
-      render: (text: string) => (
+      render: (example: number) => (
         <div>
-          <Button size="small" onClick={() => loadCoalitionStructureGame(text)}>
+          <Button
+            size="small"
+            onClick={() => loadCoalitionStructureGame(example)}
+          >
             Coalition Structures
           </Button>
-          <Button size="small" onClick={() => loadMCNetsGame(text)}>
+          <Button size="small" onClick={() => loadMCNetsGame(example)}>
             MC-Nets
           </Button>
-          <Button size="small" onClick={() => loadGraphGame(text)}>
+          <Button
+            disabled={!!example}
+            size="small"
+            onClick={() => loadGraphGame(example)}
+          >
             Graph
           </Button>
         </div>
@@ -119,6 +141,18 @@ export const GameExamplesNotConnected = (
   ];
   return (
     <div className="game-examples">
+      <Row justify="space-around">
+        <InputElement
+          label="k value"
+          value={kVariable}
+          setValue={setKVariable}
+        />
+        <InputElement
+          label="nr of Players"
+          value={nrOfPlayers}
+          setValue={setNrOfPlayers}
+        />
+      </Row>
       <Table
         bordered={true}
         size="small"
@@ -136,9 +170,9 @@ export const GameExamplesNotConnected = (
 };
 
 const mapStateToProps = (state: { aplication: Store }): GraphGame => {
-  const { nrOfPlayes, edges, shapleyValues } = state.aplication.graph || {};
+  const { nrOfPlayers, edges, shapleyValues } = state.aplication.graph || {};
   return {
-    nrOfPlayes,
+    nrOfPlayers,
     edges,
     shapleyValues,
   };

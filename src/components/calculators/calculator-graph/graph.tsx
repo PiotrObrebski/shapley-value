@@ -13,14 +13,14 @@ import { GraphInputSection } from "./graph-input-section";
 import { separatorString } from "../../../utilities/calculation-functions";
 
 interface IGraphProps extends GraphGame {
-  setGraphNumberOfPlayers: (nrOfPlayes: number) => void;
+  setGraphNumberOfPlayers: (nrOfPlayers: number) => void;
   setGraphNodes: (nodes: INode[]) => void;
   setGraphEdges: (edges: IEdge[]) => void;
 }
 
 export const GraphNotConnected = (props: IGraphProps) => {
   const {
-    nrOfPlayes,
+    nrOfPlayers,
     edges,
     nodes,
     setGraphNumberOfPlayers,
@@ -32,7 +32,6 @@ export const GraphNotConnected = (props: IGraphProps) => {
   const [selected, setSelected] = useState<IEdge | INode | null>(null);
   const [copied, setCopied] = useState<IEdge | INode | null>(null);
   const refElement = useRef<Component<IGraphViewProps>>(null);
-  console.log(edges);
 
   const getNodeIndex = (searchNode: { [x: string]: string }): number => {
     return nodes
@@ -102,7 +101,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
       );
     });
     if (!viewNode.title.includes(copyString)) {
-      setGraphNumberOfPlayers(nrOfPlayes ? nrOfPlayes - 1 : 0);
+      setGraphNumberOfPlayers(nrOfPlayers ? nrOfPlayers - 1 : 0);
     }
     setGraphNodes(nodeArr);
     setGraphEdges(newEdges ?? []);
@@ -216,7 +215,7 @@ export const GraphNotConnected = (props: IGraphProps) => {
       const tmpNodes = nodes;
       const newNode = {
         ...copied,
-        id: `${(nrOfPlayes ?? 0) + 1}${separatorString}${copied.id}`,
+        id: `${(nrOfPlayers ?? 0) + 1}${separatorString}${copied.id}`,
         title: `${copyString}${copied.title}`,
       };
       setGraphNodes([...(tmpNodes ?? []), newNode]);
@@ -258,9 +257,9 @@ export const GraphNotConnected = (props: IGraphProps) => {
 };
 
 const mapStateToProps = (state: { aplication: Store }): GraphGame => {
-  const { nrOfPlayes, edges, nodes } = state.aplication.graph || {};
+  const { nrOfPlayers, edges, nodes } = state.aplication.graph || {};
   return {
-    nrOfPlayes,
+    nrOfPlayers,
     edges,
     nodes,
   };
@@ -269,8 +268,8 @@ const mapDispatchToProps = (
   dispatch: (arg0: { type: string; payload: number | IEdge[] | INode[] }) => any
 ) => {
   return {
-    setGraphNumberOfPlayers: (nrOfPlayes: number) =>
-      dispatch(setGraphNumberOfPlayers(nrOfPlayes)),
+    setGraphNumberOfPlayers: (nrOfPlayers: number) =>
+      dispatch(setGraphNumberOfPlayers(nrOfPlayers)),
     setGraphEdges: (edges: IEdge[]) => dispatch(setGraphEdges(edges)),
     setGraphNodes: (nodes: INode[]) => dispatch(setGraphNodes(nodes)),
   };
